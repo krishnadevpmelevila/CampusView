@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Assessment Input</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h2,
+        h3 {
+            color: #0056b3;
+        }
+
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #004494;
+        }
+
+        .table-container {
+            margin-bottom: 30px;
+        }
+
+        .student-info {
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Dynamic Student Assessment Entry</h2>
+    <form id="assessmentForm">
+        <h3>Basic Details</h3>
+        <label>Branch: <input type="text" id="branch" required></label>
+        <label>Subject: <input type="text" id="subject" required></label>
+        <label>Semester: <input type="text" id="semester" required></label>
+        <label>Course Code: <input type="text" id="courseCode" required></label>
+        <label>Batch: <input type="text" id="batch" required></label>
+        <label>No. of COs: <input type="number" id="numCOs" required></label>
+        <label>No. of Students: <input type="number" id="numStudents" required></label>
+        <label>No. of POs: <input type="number" id="numPOs" required></label>
+        <label>No. of PSOs: <input type="number" id="numPSOs" required></label>
+        <label>University Exam:
+            <select id="universityExam" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </label>
+        <label>Assessment Year: <input type="text" id="assessmentYear" required></label>
+        <label>Faculty Name: <input type="text" id="facultyName" required></label>
+
+        <h3>Student Details</h3>
+        <label>Student Name: <input type="text" id="studentName"></label>
+        <label>Roll Number: <input type="text" id="rollNumber"></label>
+        <button type="button" onclick="addStudent()">Add Student</button>
+
+        <div id="assessmentToolsSection">
+            <!-- Dynamic Assessment Tools & Questions will go here -->
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+    <script>
+    const data = {
+        tools: [
+            {
+                name: 'Series 1',
+                questions: [
+                    { id: 'Q1', co: 'C212.1', blooms: 'Remember', maxMarks: 10 },
+                    { id: 'Q2', co: 'C212.1', blooms: 'Understanding', maxMarks: 8 },
+                    { id: 'Q3', co: 'C212.2', blooms: 'Analyse', maxMarks: 12 }
+                ]
+            },
+            {
+                name: 'Series 2',
+                questions: [
+                    { id: 'Q1', co: 'C212.1', blooms: 'Remember', maxMarks: 10 },
+                    { id: 'Q2', co: 'C212.2', blooms: 'Understanding', maxMarks: 9 }
+                ]
+            },
+            {
+                name: 'Assignment 1',
+                questions: [
+                    { id: 'Q1', co: 'C212.1', blooms: 'Remember', maxMarks: 10 },
+                    { id: 'Q2', co: 'C212.2', blooms: 'Understanding', maxMarks: 9 }
+                ]
+            }
+        ]
+    };
+
+    let studentCount = 0;
+
+    function generateAssessmentTools() {
+        const assessmentToolsSection = document.getElementById('assessmentToolsSection');
+        data.tools.forEach(tool => {
+            const toolContainer = document.createElement('div');
+            toolContainer.classList.add('table-container');
+            toolContainer.innerHTML = `<h3>${tool.name}</h3>`;
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        ${tool.questions
+                            .map(q => `<th>${q.id}<br>CO: ${q.co}<br>(${q.blooms}, Max: ${q.maxMarks})</th>`)
+                            .join('')}
+                    </tr>
+                </thead>
+                <tbody id="${tool.name}-questions"></tbody>`;
+            toolContainer.appendChild(table);
+            assessmentToolsSection.appendChild(toolContainer);
+        });
+    }
+
+    function addStudent() {
+        const studentName = document.getElementById('studentName').value.trim();
+        const rollNumber = document.getElementById('rollNumber').value.trim();
+
+        if (!studentName || !rollNumber) {
+            alert("Please enter both Student Name and Roll Number.");
+            return;
+        }
+
+        studentCount++;
+
+        data.tools.forEach(tool => {
+            const tableBody = document.getElementById(`${tool.name}-questions`);
+            const studentRow = document.createElement('tr');
+            const studentRowId = `studentRow${studentCount}-${tool.name}`; // Unique row ID
+
+            studentRow.id = studentRowId;
+            studentRow.innerHTML = `
+                <td><input type="text" value="${studentName}" readonly></td>
+                <td><input type="text" value="${rollNumber}" readonly></td>
+                ${tool.questions.map(q => `
+                    <td>
+                        <input type="number" name="marksObtained_${studentCount}_${tool.name}_${q.id}" max="${q.maxMarks}" required />
+                    </td>`).join('')}`;
+            tableBody.appendChild(studentRow);
+        });
+
+        document.getElementById('studentName').value = '';
+        document.getElementById('rollNumber').value = '';
+    }
+
+    document.getElementById('assessmentForm').addEventListener('submit', event => {
+        event.preventDefault();
+
+        const finalData = {
+            branch: document.getElementById('branch').value || '',
+            subject: document.getElementById('subject').value || '',
+            semester: document.getElementById('semester').value || '',
+            courseCode: document.getElementById('courseCode').value || '',
+            batch: document.getElementById('batch').value || '',
+            numCOs: document.getElementById('numCOs').value || '',
+            numStudents: document.getElementById('numStudents').value || '',
+            numPOs: document.getElementById('numPOs').value || '',
+            numPSOs: document.getElementById('numPSOs').value || '',
+            universityExam: document.getElementById('universityExam').value || '',
+            assessmentYear: document.getElementById('assessmentYear').value || '',
+            facultyName: document.getElementById('facultyName').value || '',
+            students: {}
+        };
+
+        const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
+      
+        studentRows.forEach(row => {
+            const rowId = row.id;
+            if (!rowId.includes('-')) {
+                console.warn(`Skipping row with invalid ID: ${rowId}`);
+                return;
+            }
+            
+            const [studentRowPrefix, toolName] = rowId.split('-');
+        
+            const studentId = studentRowPrefix.split('studentRow')[1];
+                console.log('PRE:', studentId);
+
+            const studentName = row.querySelector('td:nth-child(1) input').value;
+            const rollNumber = row.querySelector('td:nth-child(2) input').value;
+
+            if (!finalData.students[studentId]) {
+                finalData.students[studentId] = {
+                    name: studentName,
+                    roll: rollNumber,
+                    tools: {}
+                };
+            }
+
+            if (!finalData.students[studentId].tools[toolName]) {
+                finalData.students[studentId].tools[toolName] = { questions: [] };
+            }
+         
+            const tool = data.tools.find(t => t.name === toolName);
+            console.log('Tool:', tool);
+            tool.questions.forEach((question, index) => {
+                const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
+                const marksObtained = marksInput ? marksInput.value : '0';
+
+                finalData.students[studentId].tools[toolName].questions.push({
+                    questionId: question.id,
+                    co: question.co,
+                    blooms: question.blooms,
+                    maxMarks: question.maxMarks,
+                    marksObtained
+                });
+            });
+        });
+
+        console.log('Final Data:', finalData);
+        fetch('/step2', {
+            method: 'POST',
+            body: JSON.stringify(finalData),
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(response => response.json())
+            .then(data => alert('Data submitted successfully!'))
+            .catch(error => console.error('Error:', error));
+    });
+
+    generateAssessmentTools();
+</script>
+
+
+</body>
+
+</html>

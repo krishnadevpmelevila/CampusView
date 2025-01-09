@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegant Assessment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        form {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            background-color: #007bff;
+            color: white;
+            margin: -20px -20px 20px -20px;
+            padding: 15px;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th, table td {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f1f1f1;
+            font-weight: bold;
+        }
+
+        button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .tool-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            position: relative;
+        }
+
+        .add-tool-btn {
+            background-color: #28a745;
+        }
+
+        .add-tool-btn:hover {
+            background-color: #218838;
+        }
+
+        .add-question-btn {
+            background-color: #ffc107;
+        }
+
+        .add-question-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .remove-tool-btn {
+            background-color: #dc3545;
+            color: white;
+            position: static;
+            top: 15px;
+            right: 15px;
+            border: none;
+            padding: 10px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .remove-tool-btn:hover {
+            background-color: #c82333;
+        }
+
+        .tool-container input[type="number"],
+        .tool-container input[type="text"] {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <form action="/submit" method="POST">
+        <h2>Assessment Form</h2>
+
+        <label>Branch: <input type="text" name="branch" required /></label>
+        <label>Subject: <input type="text" name="subject" required /></label>
+        <label>Semester: <input type="text" name="semester" required /></label>
+        <label>Course Code: <input type="text" name="courseCode" required /></label>
+        <label>Batch: <input type="text" name="batch" required /></label>
+        <label>No. of COs: <input type="number" name="numCOs" required /></label>
+        <label>No. of Students: <input type="number" name="numStudents" required /></label>
+        <label>No. of POs: <input type="number" name="numPOs" required /></label>
+        <label>No. of PSOs: <input type="number" name="numPSOs" required /></label>
+        <label>University Exam:
+            <select name="universityExam" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+        </label>
+        <label>Assessment Year: <input type="text" name="assessmentYear" required /></label>
+        <label>Faculty Name: <input type="text" name="facultyName" required /></label>
+
+        <h2>Assessment Tools</h2>
+        <div id="assessmentTools">
+            <div class="tool-container">
+                <label>Select Tool:
+                    <select name="tool[]" class="tool-selector" onchange="updateToolOptions(this)" required>
+                        <option value="">Select</option>
+                        <option value="Series 1">Series 1</option>
+                        <option value="Series 2">Series 2</option>
+                        <option value="Assignment 1">Assignment 1</option>
+                        <option value="Assignment 2">Assignment 2</option>
+                    </select>
+                </label>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Q.NO</th>
+                            <th>CO No.</th>
+                            <th>Blooms Taxonomy</th>
+                            <th>Max Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="question-table">
+                        <tr>
+                            <td><input type="number" name="questions[]" required /></td>
+                            <td><input type="text" name="coNumber[]" required /></td>
+                            <td><input type="text" name="bloomsTaxonomy[]" required /></td>
+                            <td><input type="number" name="maxMarks[]" required /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="add-question-btn" onclick="addQuestion(this)">Add Question</button>
+                <button type="button" class="remove-tool-btn" onclick="removeTool(this)">Remove Tool</button>
+            </div>
+        </div>
+
+        <button type="button" class="add-tool-btn" onclick="addTool()">Add Another Tool</button>
+        <br />
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function addTool() {
+            const container = document.getElementById('assessmentTools');
+            const selectedTools = Array.from(document.querySelectorAll('.tool-selector')).map(sel => sel.value);
+
+            const newTool = document.createElement('div');
+            newTool.className = 'tool-container';
+            newTool.innerHTML = `
+                <label>Select Tool: 
+                    <select name="tool[]" class="tool-selector" onchange="updateToolOptions(this) required">
+                        <option value="">Select</option>
+                        <option value="Series 1">Series 1</option>
+                        <option value="Series 2">Series 2</option>
+                        <option value="Assignment 1">Assignment 1</option>
+                        <option value="Assignment 2">Assignment 2</option>
+                    </select>
+                </label>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Q.NO</th>
+                            <th>CO No.</th>
+                            <th>Blooms Taxonomy</th>
+                            <th>Max Marks</th>
+                        </tr>
+                    </thead>
+                    <tbody class="question-table">
+                        <tr>
+                            <td><input type="number" name="questions[]" required /></td>
+                            <td><input type="text" name="coNumber[]" required /></td>
+                            <td><input type="text" name="bloomsTaxonomy[]" required /></td>
+                            <td><input type="number" name="maxMarks[]" required /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" class="add-question-btn" onclick="addQuestion(this)">Add Question</button>
+                <button type="button" class="remove-tool-btn" onclick="removeTool(this)">Remove Tool</button>
+            `;
+
+            container.appendChild(newTool);
+            updateToolOptions();
+        }
+
+        function addQuestion(button) {
+            const tbody = button.parentElement.querySelector('.question-table');
+            const row = `
+                <tr>
+                    <td><input type="number" name="questions[]" required /></td>
+                    <td><input type="text" name="coNumber[]" required /></td>
+                    <td><input type="text" name="bloomsTaxonomy[]" required /></td>
+                    <td><input type="number" name="maxMarks[]" required /></td>
+                </tr>`;
+            tbody.insertAdjacentHTML('beforeend', row);
+        }
+
+        function removeTool(button) {
+            button.parentElement.remove();
+            updateToolOptions();
+        }
+
+        function updateToolOptions(select) {
+            const selectedTools = Array.from(document.querySelectorAll('.tool-selector')).map(sel => sel.value);
+            const options = ['Series 1', 'Series 2', 'Assignment 1', 'Assignment 2']; // Data from the server
+
+            document.querySelectorAll('.tool-selector').forEach(sel => {
+                const currentValue = sel.value;
+                sel.innerHTML = options
+                    .filter(option => !selectedTools.includes(option) || option === currentValue)
+                    .map(option => `<option value="${option}">${option}</option>`)
+                    .join('');
+                sel.value = currentValue;
+            });
+        }
+    </script>
+</body>
+</html>
