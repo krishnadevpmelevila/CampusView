@@ -10,11 +10,30 @@
 </head>
 
 <body>
+    <header
+        style="display: flex; justify-content: flex-end; align-items: center; background-color: #007bff; padding: 10px;">
+        <button id="logoutButton" style="
+        display: flex;
+        align-items: center;
+        color: white;
+        background: linear-gradient(45deg, #6ab1f7, #007bff);
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: Arial, sans-serif;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    "> Logout </button>
+    </header>
+
     <div id="successPopup" class="popup">
         <p>Data added successfully!</p>
     </div>
 
-    <form action="/submit" id="submitForm"  method="POST">
+    <form action="/submit" id="submitForm" method="POST">
         <h2>Assessment Form</h2>
 
         <label>Branch: <input type="text" name="branch" required /></label>
@@ -147,7 +166,22 @@
                     .join('');
                 sel.value = currentValue;
             });
-        }
+        } document.getElementById('logoutButton').addEventListener('click', async () => {
+            try {
+                // Send a logout request to the server
+                const response = await fetch('/logout', { method: 'POST' });
+
+                if (response.ok) {
+                    // Redirect to login page after successful logout
+                    window.location.href = '/login';
+                } else {
+                    alert('Failed to log out.');
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+            }
+        });
+
     </script>
 </body>
 
