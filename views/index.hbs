@@ -77,12 +77,13 @@
                     </thead>
                     <tbody class="question-table">
                         <tr>
-                            <td><input type="number" name="questions[]" required /></td>
-                            <td><input type="text" name="coNumber[]" required /></td>
-                            <td><input type="text" name="bloomsTaxonomy[]" required /></td>
-                            <td><input type="number" name="maxMarks[]" required /></td>
+                            <td><input type="number" name="questions[0][]" required /></td>
+                            <td><input type="text" name="coNumber[0][]" required /></td>
+                            <td><input type="text" name="bloomsTaxonomy[0][]" required /></td>
+                            <td><input type="number" name="maxMarks[0][]" required /></td>
                         </tr>
                     </tbody>
+    
                 </table>
                 <button type="button" class="add-question-btn" onclick="addQuestion(this)">Add Question</button>
                 <button type="button" class="remove-tool-btn" onclick="removeTool(this)">Remove Tool</button>
@@ -139,15 +140,19 @@
 
         function addQuestion(button) {
             const tbody = button.parentElement.querySelector('.question-table');
+            const toolIndex = [...document.querySelectorAll('.tool-container')].indexOf(button.closest('.tool-container'));
+
             const row = `
-                <tr>
-                    <td><input type="number" name="questions[][]" required /></td>
-                    <td><input type="text" name="coNumber[][]" required /></td>
-                    <td><input type="text" name="bloomsTaxonomy[][]" required /></td>
-                    <td><input type="number" name="maxMarks[][]" required /></td>
-                </tr>`;
+        <tr>
+            <td><input type="number" name="questions[${toolIndex}][]" required /></td>
+            <td><input type="text" name="coNumber[${toolIndex}][]" required /></td>
+            <td><input type="text" name="bloomsTaxonomy[${toolIndex}][]" required /></td>
+            <td><input type="number" name="maxMarks[${toolIndex}][]" required /></td>
+        </tr>`;
+
             tbody.insertAdjacentHTML('beforeend', row);
         }
+
 
         function removeTool(button) {
             button.parentElement.remove();
