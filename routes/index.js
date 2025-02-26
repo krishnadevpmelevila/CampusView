@@ -238,6 +238,9 @@ router.post('/submit', upload.none(), async (req, res) => {
   }
 });
 
+router.get("/home", function (req, res) {
+  res.render("home");
+})
 
 router.get("/step2", function (req, res) {
   res.render("step2");
