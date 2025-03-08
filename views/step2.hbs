@@ -206,8 +206,8 @@
         <h3>Student Details</h3>
         <div id="studentList">
             <div class="student-entry">
-                <label>Student Name: <input type="text" id="studentName" name="studentName[]" required></label>
-                <label>Roll Number: <input type="text" id="rollNumber" name="rollNumber[]" required></label>
+                <label>Student Name: <input type="text" id="studentName" name="studentName[]"></label>
+                <label>Roll Number: <input type="text" id="rollNumber" name="rollNumber[]"></label>
                 <button type="button" class="remove-student-btn" onclick="removeStudent(this)">Remove</button>
             </div>
         </div>
@@ -216,7 +216,7 @@
 
         <h3>Assessment Tools & Questions</h3>
         <div id="assessmentToolsSection"></div>
-        
+
 
         <br><br>
         <button type="submit">Submit</button>
@@ -380,7 +380,7 @@
         }
 
         // Add Assessment Tool
-       
+
 
         // Remove Assessment Tool
         function removeAssessmentTool(button) {
@@ -542,80 +542,121 @@
             }
         }
 
-
-        document.getElementById('assessmentForm').addEventListener('submit', event => {
+        document.getElementById('assessmentForm').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const finalData = {
-                branch: document.getElementById('branch').value || '',
-                subject: document.getElementById('subject').value || '',
-                semester: document.getElementById('semester').value || '',
+                branch: document.getElementById('branchDropdown').value || '',
+                subject: document.getElementById('subjectDropdown').value || '',
+                semester: document.getElementById('semesterDropdown').value || '',
                 courseCode: document.getElementById('courseCode').value || '',
                 batch: document.getElementById('batch').value || '',
-                numStudents: document.getElementById('numStudents').value || '',
-                universityExam: document.getElementById('universityExam').value || '',
-                assessmentYear: document.getElementById('assessmentYear').value || '',
-                facultyName: document.getElementById('facultyName').value || '',
                 students: {}
             };
 
-            const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
+            const branch = document.getElementById("branchDropdown").value;
+            const semester = document.getElementById("semesterDropdown").value;
+            const subject = document.getElementById("subjectDropdown").value;
+            const courseCode = document.getElementById("courseCode").value;
+            const batch = document.getElementById("batch").value;
+            const faculty = document.getElementById("facultyDropdown").value;
+            const assessmentYear = document.getElementById("assessmentYear").value;
 
-            studentRows.forEach(row => {
-                const rowId = row.id;
-                if (!rowId.includes('-')) {
-                    console.warn(`Skipping row with invalid ID: ${rowId}`);
-                    return;
+            const queryParams = new URLSearchParams({
+                branch,
+                semester,
+                subject,
+                courseCode,
+                batch,
+                faculty,
+                assessmentYear
+            }).toString();
+
+            console.log('Query:', queryParams);
+
+            try {
+                const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch data");
                 }
 
-                const [studentRowPrefix, toolName] = rowId.split('-');
+                const data = await response.json();
+                console.log("Updated Assessment Data:", data);
 
-                const studentId = studentRowPrefix.split('studentRow')[1];
-                console.log('PRE:', studentId);
+                const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
 
-                const studentName = row.querySelector('td:nth-child(1) input').value;
-                const rollNumber = row.querySelector('td:nth-child(2) input').value;
+                studentRows.forEach(row => {
+                    const rowId = row.id;
 
-                if (!finalData.students[studentId]) {
-                    finalData.students[studentId] = {
-                        name: studentName,
-                        roll: rollNumber,
-                        tools: {}
-                    };
-                }
+                    if (!rowId.includes('-')) {
+                        console.warn(`Skipping row with invalid ID: ${rowId}`);
+                        return;
+                    }
 
-                if (!finalData.students[studentId].tools[toolName]) {
-                    finalData.students[studentId].tools[toolName] = { questions: [] };
-                }
+                    const [studentRowPrefix, toolName] = rowId.split('-');
+                    const studentId = studentRowPrefix.split('studentRow')[1];
 
-                const tool = data.tools.find(t => t.name === toolName);
-                console.log('Tool:', tool);
-                tool.questions.forEach((question, index) => {
-                    const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
-                    const marksObtained = marksInput ? marksInput.value : '0';
+                    console.log('PRE:', finalData.students);
 
-                    finalData.students[studentId].tools[toolName].questions.push({
-                        questionId: question.id,
-                        co: question.co,
-                        blooms: question.blooms,
-                        maxMarks: question.maxMarks,
-                        marksObtained
+                    const studentName = row.querySelector('td:nth-child(1) input').value;
+                    const rollNumber = row.querySelector('td:nth-child(2) input').value;
+
+                    console.log('Student:', studentName, rollNumber, studentId);
+
+                    if (!finalData.students[studentId]) {
+                        finalData.students[studentId] = {
+                            name: studentName,
+                            roll: rollNumber,
+                            tools: {}
+                        };
+                    }
+
+                    if (!finalData.students[studentId].tools[toolName]) {
+                        finalData.students[studentId].tools[toolName] = { questions: [] };
+                    }
+
+                    const tool = data.tools.find(t => t.name === toolName);
+                    if (!tool) {
+                        console.warn(`Tool "${toolName}" not found in data.tools`);
+                        return;
+                    }
+
+                    console.log('Tool:', tool);
+
+                    tool.questions.forEach((question, index) => {
+                        const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
+                        const marksObtained = marksInput ? marksInput.value : '0';
+
+                        finalData.students[studentId].tools[toolName].questions.push({
+                            questionId: question.id,
+                            co: question.co,
+                            blooms: question.blooms,
+                            maxMarks: question.maxMarks,
+                            marksObtained
+                        });
                     });
                 });
-            });
 
-            console.log('Final Data:', finalData);
-            fetch('/step2', {
-                method: 'POST',
-                body: JSON.stringify(finalData),
-                headers: { 'Content-Type': 'application/json' }
-            })
-                .then(response => response.json())
-                .then(data => alert('Data submitted successfully!'))
-                .catch(error => console.error('Error:', error));
+                console.log('Final Data:', finalData);
+
+                const submitResponse = await fetch('/step2', {
+                    method: 'POST',
+                    body: JSON.stringify(finalData),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const submitData = await submitResponse.json();
+                alert('Data submitted successfully!');
+                console.log('Submit Response:', submitData);
+
+                generateAssessmentTools();
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
 
-        generateAssessmentTools();
+
     </script>
 
 
