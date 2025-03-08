@@ -19,7 +19,7 @@ const ToolSchema = new mongoose.Schema({
 const StudentSchema = new mongoose.Schema({
   name: String,
   roll: String,
-  tools: [ToolSchema],
+  tools: [ToolSchema],  
 });
 
 // Define Assessment Schema (Includes students)
@@ -41,5 +41,6 @@ const AssessmentSchema = new mongoose.Schema({
 });
 
 const Assessment = mongoose.model("Assessment", AssessmentSchema);
+
 
 module.exports = Assessment;
