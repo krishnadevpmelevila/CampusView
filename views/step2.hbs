@@ -177,7 +177,8 @@
             margin-bottom: 6px;
         }
 
-        .form-select, .form-control {
+        .form-select,
+        .form-control {
             border: 1px solid #ddd;
             padding: 12px 15px;
             border-radius: 8px;
@@ -186,7 +187,8 @@
             transition: border-color 0.3s;
         }
 
-        .form-select:focus, .form-control:focus {
+        .form-select:focus,
+        .form-control:focus {
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
         }
@@ -207,7 +209,8 @@
             table-layout: auto;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #eee;
             padding: 12px;
             text-align: center;
@@ -311,6 +314,7 @@
             .sidebar {
                 width: 220px;
             }
+
             .content-area {
                 margin-left: 220px;
             }
@@ -321,12 +325,15 @@
                 width: 0;
                 display: none;
             }
+
             .content-area {
                 margin-left: 0;
             }
+
             .main-container {
                 flex-direction: column;
             }
+
             .student-entry {
                 flex-direction: column;
                 align-items: flex-start;
@@ -343,330 +350,358 @@
                 <span>CAMPUS</span>
                 <span>VIEW</span>
             </div>
-            
+
             <a href="/dashboard" class="nav-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                </svg>
                 <span class="nav-item-text">Dashboard</span>
             </a>
-            
+
             <a href="/assessment-tools" class="nav-item ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z">
+                    </path>
+                </svg>
                 <span class="nav-item-text">Add Assessment Tools</span>
             </a>
-            
-            <a href="/student-data" class="nav-item active" >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+
+            <a href="/student-data" class="nav-item active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
                 <span class="nav-item-text">Add Student Data</span>
             </a>
-            
+
             <a href="/attaintmentCalculation" class="nav-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
                 <span class="nav-item-text">Attainment Calculation</span>
             </a>
-            
+
             <div class="mt-auto">
                 <a href="/logout" id="logoutButton" class="nav-item logout-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
                     <span class="nav-item-text">Logout</span>
                 </a>
             </div>
         </div>
 
         <!-- Main Content Area -->
+
         <div class="content-area">
             <div class="top-header">
                 <h1 class="page-title">Dynamic Student Assessment Entry</h1>
-                
+
                 <div class="d-flex align-items-center">
-                    <input type="date" class="form-control me-3" id="datePicker" placeholder="dd-mm-yyyy">
-                    
+                   
+
                     <div class="user-section">
-                        <img src="/api/placeholder/40/40" alt="User Profile">
+                        <img src="/images/image.png" alt="User Profile">
                         <div class="user-info">
                             <div class="user-name">Admin User</div>
                             <div class="user-role">Administrator</div>
                         </div>
                     </div>
-                    
-                    <button class="dark-mode-toggle ms-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    </button>
+
+                  
                 </div>
             </div>
-
-            <form id="assessmentForm">
-                <!-- Selection Criteria Card -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Selection Criteria
-                    </div>
-                    <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="branchDropdown" class="form-label">Branch</label>
-                                <select id="branchDropdown" class="form-select" required>
-                                    <option value="">Select Branch</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="assessmentYear" class="form-label">Assessment Year</label>
-                                <select id="assessmentYear" class="form-select" required>
-                                    <option value="">Select Year</option>
-                                </select>
-                            </div>
+            <div class="container">
+                <form id="assessmentForm">
+                    <!-- Selection Criteria Card -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Selection Criteria
                         </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="branchDropdown" class="form-label">Branch</label>
+                                    <select id="branchDropdown" class="form-select" required>
+                                        <option value="">Select Branch</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="assessmentYear" class="form-label">Assessment Year</label>
+                                    <select id="assessmentYear" class="form-select" required>
+                                        <option value="">Select Year</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="semesterDropdown" class="form-label">Semester</label>
-                                <select id="semesterDropdown" class="form-select" required>
-                                    <option value="">Select Semester</option>
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="semesterDropdown" class="form-label">Semester</label>
+                                    <select id="semesterDropdown" class="form-select" required>
+                                        <option value="">Select Semester</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="subjectDropdown" class="form-label">Subject</label>
+                                    <select id="subjectDropdown" class="form-select" required>
+                                        <option value="">Select Subject</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="subjectDropdown" class="form-label">Subject</label>
-                                <select id="subjectDropdown" class="form-select" required>
-                                    <option value="">Select Subject</option>
-                                </select>
-                            </div>
-                        </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="facultyDropdown" class="form-label">Faculty Name</label>
-                                <select id="facultyDropdown" class="form-select" required>
-                                    <option value="">Select Faculty</option>
-                                </select>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="facultyDropdown" class="form-label">Faculty Name</label>
+                                    <select id="facultyDropdown" class="form-select" required>
+                                        <option value="">Select Faculty</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="courseCode" class="form-label">Course Code</label>
+                                    <input type="text" id="courseCode" class="form-control" required readonly>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="courseCode" class="form-label">Course Code</label>
-                                <input type="text" id="courseCode" class="form-control" required readonly>
-                            </div>
-                        </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="batch" class="form-label">Batch</label>
-                                <select id="batch" class="form-select" required>
-                                    <option value="">Select Batch</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Student Entry Card -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Student Details
-                    </div>
-                    <div class="card-body">
-                        <div class="student-entry">
-                            <div class="flex-grow-1 me-2">
-                                <label class="form-label">Student Name</label>
-                                <input type="text" id="studentName" name="studentName[]" class="form-control">
-                            </div>
-                            <div class="flex-grow-1 me-2">
-                                <label class="form-label">Roll Number</label>
-                                <input type="text" id="rollNumber" name="rollNumber[]" class="form-control">
-                            </div>
-                            <div class="mt-4">
-                                <button type="button" class="btn btn-primary" onclick="addStudent()">Add Student</button>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="batch" class="form-label">Batch</label>
+                                    <select id="batch" class="form-select" required>
+                                        <option value="">Select Batch</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Assessment Tools Card -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        Assessment Tools & Questions
-                    </div>
-                    <div class="card-body">
-                        <div id="assessmentToolsSection"></div>
-                    </div>
-                </div>
+                    <!-- Student Entry Card -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Student Details
+                        </div>
+                        <div class="card-body">
+                            <div class="student-entry">
+                                <div class="flex-grow-1 me-2">
+                                    <label class="form-label">Roll Number</label>
+                                    <input type="text" id="rollNumber" name="rollNumber[]" class="form-control">
+                                </div>
+                                <div class="flex-grow-1 me-2">
+                                    <label class="form-label">Student Name</label>
+                                    <input type="text" id="studentName" name="studentName[]" class="form-control">
+                                </div>
 
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
+                                <div class="mt-4">
+                                    <button type="button" class="btn btn-primary" onclick="addStudent()">Add
+                                        Student</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assessment Tools Card -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            Assessment Tools & Questions
+                        </div>
+                        <div class="card-body">
+                            <div id="assessmentToolsSection"></div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <script>
-        async function fetchFilteredAssessmentData() {
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
+        <script>
+            async function fetchFilteredAssessmentData() {
+                const branch = document.getElementById("branchDropdown").value;
+                const semester = document.getElementById("semesterDropdown").value;
+                const subject = document.getElementById("subjectDropdown").value;
+                const courseCode = document.getElementById("courseCode").value;
+                const batch = document.getElementById("batch").value;
+                const faculty = document.getElementById("facultyDropdown").value;
+                const assessmentYear = document.getElementById("assessmentYear").value;
 
-            // Construct URL with Query Parameters
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
+                // Construct URL with Query Parameters
+                const queryParams = new URLSearchParams({
+                    branch,
+                    semester,
+                    subject,
+                    courseCode,
+                    batch,
+                    faculty,
+                    assessmentYear
+                }).toString();
 
-            try {
-                const response = await fetch(`/get-filtered-assessment-data?${queryParams}`);
-                const data = await response.json();
+                try {
+                    const response = await fetch(`/get-filtered-assessment-data?${queryParams}`);
+                    const data = await response.json();
 
-                console.log("Filtered Assessment Data:", data);
-                generateAssessmentTools(data.tools);
-            } catch (error) {
-                console.error("Error fetching assessment data:", error);
+                    console.log("Filtered Assessment Data:", data);
+                    generateAssessmentTools(data.tools);
+                } catch (error) {
+                    console.error("Error fetching assessment data:", error);
+                }
             }
-        }
 
-        // Call this function when any dropdown changes
-        document.getElementById("branchDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("semesterDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("subjectDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("courseCode").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("batch").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("facultyDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("assessmentYear").addEventListener("change", fetchFilteredAssessmentData);
+            // Call this function when any dropdown changes
+            document.getElementById("branchDropdown").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("semesterDropdown").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("subjectDropdown").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("courseCode").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("batch").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("facultyDropdown").addEventListener("change", fetchFilteredAssessmentData);
+            document.getElementById("assessmentYear").addEventListener("change", fetchFilteredAssessmentData);
 
-        document.addEventListener("DOMContentLoaded", async () => {
-            try {
-                // Fetch dropdown data from API
-                const response = await fetch("/get-dropdown-data");
-                const data = await response.json();
+            document.addEventListener("DOMContentLoaded", async () => {
+                try {
+                    // Fetch dropdown data from API
+                    const response = await fetch("/get-dropdown-data");
+                    const data = await response.json();
 
-                console.log("Dropdown Data Received:", data); // Debugging output
+                    console.log("Dropdown Data Received:", data); // Debugging output
 
-                // Get all dropdown elements
-                const branchDropdown = document.getElementById("branchDropdown");
-                const semesterDropdown = document.getElementById("semesterDropdown");
-                const subjectDropdown = document.getElementById("subjectDropdown");
-                const courseCodeInput = document.getElementById("courseCode");
-                const batchDropdown = document.getElementById("batch");
-                const facultyDropdown = document.getElementById("facultyDropdown");
-                const assessmentYearDropdown = document.getElementById("assessmentYear");
+                    // Get all dropdown elements
+                    const branchDropdown = document.getElementById("branchDropdown");
+                    const semesterDropdown = document.getElementById("semesterDropdown");
+                    const subjectDropdown = document.getElementById("subjectDropdown");
+                    const courseCodeInput = document.getElementById("courseCode");
+                    const batchDropdown = document.getElementById("batch");
+                    const facultyDropdown = document.getElementById("facultyDropdown");
+                    const assessmentYearDropdown = document.getElementById("assessmentYear");
 
-                // Populate Branch Dropdown
-                populateDropdown(branchDropdown, data.branches);
+                    // Populate Branch Dropdown
+                    populateDropdown(branchDropdown, data.branches);
 
-                // Store branch-wise structured data
-                const branchData = data.branchData.reduce((acc, item) => {
-                    acc[item._id] = item;
-                    return acc;
-                }, {});
+                    // Store branch-wise structured data
+                    const branchData = data.branchData.reduce((acc, item) => {
+                        acc[item._id] = item;
+                        return acc;
+                    }, {});
 
-                // Event Listener for Branch Selection (Filters everything step-by-step)
-                branchDropdown.addEventListener("change", function () {
-                    const selectedBranch = this.value;
+                    // Event Listener for Branch Selection (Filters everything step-by-step)
+                    branchDropdown.addEventListener("change", function () {
+                        const selectedBranch = this.value;
 
-                    resetDropdown(semesterDropdown);
-                    resetDropdown(subjectDropdown);
-                    resetDropdown(facultyDropdown);
-                    resetDropdown(batchDropdown);
-                    resetDropdown(assessmentYearDropdown);
+                        resetDropdown(semesterDropdown);
+                        resetDropdown(subjectDropdown);
+                        resetDropdown(facultyDropdown);
+                        resetDropdown(batchDropdown);
+                        resetDropdown(assessmentYearDropdown);
 
-                    if (branchData[selectedBranch]) {
-                        // Populate Semesters
-                        populateDropdown(semesterDropdown, branchData[selectedBranch].semesters);
-                        // Populate Batches
-                        populateDropdown(batchDropdown, branchData[selectedBranch].batches);
-                        // Populate Assessment Years
-                        populateDropdown(assessmentYearDropdown, branchData[selectedBranch].assessmentYears);
-                    }
-                });
-
-                // Event Listener for Semester Selection
-                semesterDropdown.addEventListener("change", function () {
-                    const selectedBranch = branchDropdown.value;
-
-                    resetDropdown(subjectDropdown);
-                    resetDropdown(facultyDropdown);
-
-
-                    if (branchData[selectedBranch]) {
-                        populateDropdown(subjectDropdown, branchData[selectedBranch].subjects);
-                    }
-                });
-
-                // Event Listener for Subject Selection
-                subjectDropdown.addEventListener("change", function () {
-                    const selectedBranch = branchDropdown.value;
-                    resetDropdown(facultyDropdown);
-
-
-                    if (branchData[selectedBranch]) {
-                        populateDropdown(facultyDropdown, branchData[selectedBranch].faculty);
-                        populateTextInput(courseCodeInput, branchData[selectedBranch].courseCodes);
-                    }
-                });
-
-                // Helper Functions
-                function populateDropdown(dropdown, items) {
-                    if (!items || !Array.isArray(items) || items.length === 0) return;
-                    dropdown.innerHTML = '<option value="">Select</option>';
-                    items.forEach(item => {
-                        const option = document.createElement("option");
-                        option.value = item;
-                        option.textContent = item;
-                        dropdown.appendChild(option);
+                        if (branchData[selectedBranch]) {
+                            // Populate Semesters
+                            populateDropdown(semesterDropdown, branchData[selectedBranch].semesters);
+                            // Populate Batches
+                            populateDropdown(batchDropdown, branchData[selectedBranch].batches);
+                            // Populate Assessment Years
+                            populateDropdown(assessmentYearDropdown, branchData[selectedBranch].assessmentYears);
+                        }
                     });
-                }
 
-                function populateTextInput(input, values) {
-                    if (values && Array.isArray(values) && values.length === 1) {
-                        input.value = values[0];
+                    // Event Listener for Semester Selection
+                    semesterDropdown.addEventListener("change", function () {
+                        const selectedBranch = branchDropdown.value;
+
+                        resetDropdown(subjectDropdown);
+                        resetDropdown(facultyDropdown);
+
+
+                        if (branchData[selectedBranch]) {
+                            populateDropdown(subjectDropdown, branchData[selectedBranch].subjects);
+                        }
+                    });
+
+                    // Event Listener for Subject Selection
+                    subjectDropdown.addEventListener("change", function () {
+                        const selectedBranch = branchDropdown.value;
+                        resetDropdown(facultyDropdown);
+
+
+                        if (branchData[selectedBranch]) {
+                            populateDropdown(facultyDropdown, branchData[selectedBranch].faculty);
+                            populateTextInput(courseCodeInput, branchData[selectedBranch].courseCodes);
+                        }
+                    });
+
+                    // Helper Functions
+                    function populateDropdown(dropdown, items) {
+                        if (!items || !Array.isArray(items) || items.length === 0) return;
+                        dropdown.innerHTML = '<option value="">Select</option>';
+                        items.forEach(item => {
+                            const option = document.createElement("option");
+                            option.value = item;
+                            option.textContent = item;
+                            dropdown.appendChild(option);
+                        });
                     }
-                }
 
-                function resetDropdown(dropdown) {
-                    dropdown.innerHTML = '<option value="">Select</option>';
-                }
+                    function populateTextInput(input, values) {
+                        if (values && Array.isArray(values) && values.length === 1) {
+                            input.value = values[0];
+                        }
+                    }
 
-            } catch (error) {
-                console.error("Error loading dropdown data:", error);
+                    function resetDropdown(dropdown) {
+                        dropdown.innerHTML = '<option value="">Select</option>';
+                    }
+
+                } catch (error) {
+                    console.error("Error loading dropdown data:", error);
+                }
+            });
+
+            // Function to Remove Student Entry
+            function removeStudent(button) {
+                button.parentElement.remove();
             }
-        });
 
-        // Function to Remove Student Entry
-        function removeStudent(button) {
-            button.parentElement.remove();
-        }
+            function generateAssessmentTools(tools) {
+                const assessmentToolsSection = document.getElementById("assessmentToolsSection");
+                assessmentToolsSection.innerHTML = ""; // Clear previous content
 
-        function generateAssessmentTools(tools) {
-            const assessmentToolsSection = document.getElementById("assessmentToolsSection");
-            assessmentToolsSection.innerHTML = ""; // Clear previous content
+                tools.forEach(tool => {
+                    // Create a container for each tool
+                    const toolContainer = document.createElement("div");
+                    toolContainer.classList.add("table-container");
 
-            tools.forEach(tool => {
-                // Create a container for each tool
-                const toolContainer = document.createElement("div");
-                toolContainer.classList.add("table-container");
-                
-                // Add tool header with nice formatting
-                const toolHeader = document.createElement("div");
-                toolHeader.classList.add("p-3", "bg-light", "border-bottom", "d-flex", "align-items-center");
-                toolHeader.innerHTML = `
+                    // Add tool header with nice formatting
+                    const toolHeader = document.createElement("div");
+                    toolHeader.classList.add("p-3", "bg-light", "border-bottom", "d-flex", "align-items-center");
+                    toolHeader.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     <h5 class="mb-0">${tool.name}</h5>
                 `;
-                toolContainer.appendChild(toolHeader);
+                    toolContainer.appendChild(toolHeader);
 
-                // Create the table
-                const table = document.createElement("table");
-                table.classList.add("table", "table-hover");
-                table.innerHTML = `
+                    // Create the table
+                    const table = document.createElement("table");
+                    table.classList.add("table", "table-hover");
+                    table.innerHTML = `
                     <thead>
                         <tr>
                             <th>Student Name</th>
                             <th>Roll Number</th>
                             ${tool.questions
-                                .map(q => `<th>Q${q.id}<br>CO: ${q.co}<br>(${q.blooms}, Max: ${q.maxMarks})</th>`)
-                                .join("")}
+                            .map(q => `<th>Q${q.id}<br>CO: ${q.co}<br>(${q.blooms}, Max: ${q.maxMarks})</th>`)
+                            .join("")}
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -675,78 +710,78 @@
                     </tbody>
                 `;
 
-                toolContainer.appendChild(table);
-                assessmentToolsSection.appendChild(toolContainer);
-            });
-        }
-
-        let studentCount = 0;
-
-        async function addStudent() {
-            const studentName = document.getElementById('studentName').value.trim();
-            const rollNumber = document.getElementById('rollNumber').value.trim();
-
-            if (!studentName || !rollNumber) {
-                alert("Please enter both Student Name and Roll Number.");
-                return;
+                    toolContainer.appendChild(table);
+                    assessmentToolsSection.appendChild(toolContainer);
+                });
             }
 
-            // Get dynamic assessment data
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
+            let studentCount = 0;
 
-            // Ensure all required fields are filled before fetching
-            if (!branch || !semester || !assessmentYear) {
-                alert("Please select Branch, Semester, and Assessment Year before adding students.");
-                return;
-            }
+            async function addStudent() {
+                const studentName = document.getElementById('studentName').value.trim();
+                const rollNumber = document.getElementById('rollNumber').value.trim();
 
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
-
-            try {
-                // Fetch updated assessment data
-                const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
-
-                console.log("Updated Assessment Data:", data);
-
-                if (!data.tools || data.tools.length === 0) {
-                    alert("No assessment tools found for the selected filters.");
+                if (!studentName || !rollNumber) {
+                    alert("Please enter both Student Name and Roll Number.");
                     return;
                 }
 
-                // Increase student count
-                studentCount++;
+                // Get dynamic assessment data
+                const branch = document.getElementById("branchDropdown").value;
+                const semester = document.getElementById("semesterDropdown").value;
+                const subject = document.getElementById("subjectDropdown").value;
+                const courseCode = document.getElementById("courseCode").value;
+                const batch = document.getElementById("batch").value;
+                const faculty = document.getElementById("facultyDropdown").value;
+                const assessmentYear = document.getElementById("assessmentYear").value;
 
-                // Loop through each tool and add student row
-                data.tools.forEach(tool => {
-                    const tableBody = document.getElementById(`${tool.name}-questions`);
-                    if (!tableBody) {
-                        console.warn(`Table body not found for tool: ${tool.name}`);
+                // Ensure all required fields are filled before fetching
+                if (!branch || !semester || !assessmentYear) {
+                    alert("Please select Branch, Semester, and Assessment Year before adding students.");
+                    return;
+                }
+
+                const queryParams = new URLSearchParams({
+                    branch,
+                    semester,
+                    subject,
+                    courseCode,
+                    batch,
+                    faculty,
+                    assessmentYear
+                }).toString();
+
+                try {
+                    // Fetch updated assessment data
+                    const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+                    const data = await response.json();
+
+                    console.log("Updated Assessment Data:", data);
+
+                    if (!data.tools || data.tools.length === 0) {
+                        alert("No assessment tools found for the selected filters.");
                         return;
                     }
 
-                    const studentRow = document.createElement('tr');
-                    const studentRowId = `studentRow${studentCount}-${tool.name}`; // Unique row ID
+                    // Increase student count
+                    studentCount++;
 
-                    studentRow.id = studentRowId;
-                    studentRow.innerHTML = `
+                    // Loop through each tool and add student row
+                    data.tools.forEach(tool => {
+                        const tableBody = document.getElementById(`${tool.name}-questions`);
+                        if (!tableBody) {
+                            console.warn(`Table body not found for tool: ${tool.name}`);
+                            return;
+                        }
+
+                        const studentRow = document.createElement('tr');
+                        const studentRowId = `studentRow${studentCount}-${tool.name}`; // Unique row ID
+
+                        studentRow.id = studentRowId;
+                        studentRow.innerHTML = `
                         <td><input type="text" value="${studentName}" readonly class="form-control form-control-sm"></td>
                         <td><input type="text" value="${rollNumber}" readonly class="form-control form-control-sm"></td>
                         ${tool.questions.map(q => `
@@ -760,143 +795,143 @@
                         </td>
                     `;
 
-                    tableBody.appendChild(studentRow);
-                });
+                        tableBody.appendChild(studentRow);
+                    });
 
-                // Clear input fields
-                document.getElementById('studentName').value = '';
-                document.getElementById('rollNumber').value = '';
+                    // Clear input fields
+                    document.getElementById('studentName').value = '';
+                    document.getElementById('rollNumber').value = '';
 
-            } catch (error) {
-                console.error("Error fetching assessment data:", error);
-                alert("Error loading assessment data. Please try again.");
-            }
-        }
-
-        // Function to remove a student row dynamically
-        function removeStudent(rowId) {
-            const row = document.getElementById(rowId);
-            if (row) {
-                row.remove();
-            }
-        }
-
-        document.getElementById('assessmentForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const finalData = {
-                branch: document.getElementById('branchDropdown').value || '',
-                subject: document.getElementById('subjectDropdown').value || '',
-                semester: document.getElementById('semesterDropdown').value || '',
-                courseCode: document.getElementById('courseCode').value || '',
-                batch: document.getElementById('batch').value || '',
-                students: {}
-            };
-
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
-
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
-
-            console.log('Query:', queryParams);
-
-            try {
-                const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
+                } catch (error) {
+                    console.error("Error fetching assessment data:", error);
+                    alert("Error loading assessment data. Please try again.");
                 }
+            }
 
-                const data = await response.json();
-                console.log("Updated Assessment Data:", data);
+            // Function to remove a student row dynamically
+            function removeStudent(rowId) {
+                const row = document.getElementById(rowId);
+                if (row) {
+                    row.remove();
+                }
+            }
 
-                const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
+            document.getElementById('assessmentForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
 
-                studentRows.forEach(row => {
-                    const rowId = row.id;
+                const finalData = {
+                    branch: document.getElementById('branchDropdown').value || '',
+                    subject: document.getElementById('subjectDropdown').value || '',
+                    semester: document.getElementById('semesterDropdown').value || '',
+                    courseCode: document.getElementById('courseCode').value || '',
+                    batch: document.getElementById('batch').value || '',
+                    students: {}
+                };
 
-                    if (!rowId.includes('-')) {
-                        console.warn(`Skipping row with invalid ID: ${rowId}`);
-                        return;
+                const branch = document.getElementById("branchDropdown").value;
+                const semester = document.getElementById("semesterDropdown").value;
+                const subject = document.getElementById("subjectDropdown").value;
+                const courseCode = document.getElementById("courseCode").value;
+                const batch = document.getElementById("batch").value;
+                const faculty = document.getElementById("facultyDropdown").value;
+                const assessmentYear = document.getElementById("assessmentYear").value;
+
+                const queryParams = new URLSearchParams({
+                    branch,
+                    semester,
+                    subject,
+                    courseCode,
+                    batch,
+                    faculty,
+                    assessmentYear
+                }).toString();
+
+                console.log('Query:', queryParams);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
+
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch data");
                     }
 
-                    const [studentRowPrefix, toolName] = rowId.split('-');
-                    const studentId = studentRowPrefix.split('studentRow')[1];
+                    const data = await response.json();
+                    console.log("Updated Assessment Data:", data);
 
-                    console.log('PRE:', finalData.students);
+                    const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
 
-                    const studentName = row.querySelector('td:nth-child(1) input').value;
-                    const rollNumber = row.querySelector('td:nth-child(2) input').value;
+                    studentRows.forEach(row => {
+                        const rowId = row.id;
 
-                    console.log('Student:', studentName, rollNumber, studentId);
+                        if (!rowId.includes('-')) {
+                            console.warn(`Skipping row with invalid ID: ${rowId}`);
+                            return;
+                        }
 
-                    if (!finalData.students[studentId]) {
-                        finalData.students[studentId] = {
-                            name: studentName,
-                            roll: rollNumber,
-                            tools: {}
-                        };
-                    }
+                        const [studentRowPrefix, toolName] = rowId.split('-');
+                        const studentId = studentRowPrefix.split('studentRow')[1];
 
-                    if (!finalData.students[studentId].tools[toolName]) {
-                        finalData.students[studentId].tools[toolName] = { questions: [] };
-                    }
+                        console.log('PRE:', finalData.students);
 
-                    const tool = data.tools.find(t => t.name === toolName);
-                    if (!tool) {
-                        console.warn(`Tool "${toolName}" not found in data.tools`);
-                        return;
-                    }
+                        const studentName = row.querySelector('td:nth-child(1) input').value;
+                        const rollNumber = row.querySelector('td:nth-child(2) input').value;
 
-                    console.log('Tool:', tool);
+                        console.log('Student:', studentName, rollNumber, studentId);
 
-                    tool.questions.forEach((question, index) => {
-                        const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
-                        const marksObtained = marksInput ? marksInput.value : '0';
+                        if (!finalData.students[studentId]) {
+                            finalData.students[studentId] = {
+                                name: studentName,
+                                roll: rollNumber,
+                                tools: {}
+                            };
+                        }
 
-                        finalData.students[studentId].tools[toolName].questions.push({
-                            questionId: question.id,
-                            co: question.co,
-                            blooms: question.blooms,
-                            maxMarks: question.maxMarks,
-                            marksObtained
+                        if (!finalData.students[studentId].tools[toolName]) {
+                            finalData.students[studentId].tools[toolName] = { questions: [] };
+                        }
+
+                        const tool = data.tools.find(t => t.name === toolName);
+                        if (!tool) {
+                            console.warn(`Tool "${toolName}" not found in data.tools`);
+                            return;
+                        }
+
+                        console.log('Tool:', tool);
+
+                        tool.questions.forEach((question, index) => {
+                            const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
+                            const marksObtained = marksInput ? marksInput.value : '0';
+
+                            finalData.students[studentId].tools[toolName].questions.push({
+                                questionId: question.id,
+                                co: question.co,
+                                blooms: question.blooms,
+                                maxMarks: question.maxMarks,
+                                marksObtained
+                            });
                         });
                     });
-                });
 
-                console.log('Final Data:', finalData);
+                    console.log('Final Data:', finalData);
 
-                const submitResponse = await fetch('/step2', {
-                    method: 'POST',
-                    body: JSON.stringify(finalData),
-                    headers: { 'Content-Type': 'application/json' }
-                });
+                    const submitResponse = await fetch('/step2', {
+                        method: 'POST',
+                        body: JSON.stringify(finalData),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
 
-                const submitData = await submitResponse.json();
-                alert('Data submitted successfully!');
-                console.log('Submit Response:', submitData);
+                    const submitData = await submitResponse.json();
+                    alert('Data submitted successfully!');
+                    console.log('Submit Response:', submitData);
 
-                generateAssessmentTools();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
+                    generateAssessmentTools();
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
 
 
-    </script>
+        </script>
 
 
 </body>

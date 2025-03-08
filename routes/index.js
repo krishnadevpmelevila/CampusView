@@ -11,6 +11,9 @@ const calculateAssessment = require('../utils/calculateAssessment');
 const AssessmentRecord = require('../models/assessmentRecordsSchema');
 
 /* GET home page. */
+router.get('/', function (req, res, next) {
+  res.redirect('/dashboard');
+});
 router.get('/assessment-tools', authenticateToken, function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
@@ -97,12 +100,12 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   // Clear the cookie named 'token'
   res.clearCookie('token', { path: '/' }); // Ensure the path matches the cookie's path
   res.redirect('/login');
 });
-router.get("/get-filtered-assessment-data", async (req, res) => {
+router.get("/get-filtered-assessment-data",authenticateToken, async (req, res) => {
   try {
     const { branch, semester, subject, courseCode, batch, numCOs, numPOs, numPSOs, faculty, assessmentYear } = req.query;
 
@@ -145,7 +148,7 @@ router.get("/get-filtered-assessment-data", async (req, res) => {
 });
 
 // API to get all unique dropdown values
-router.get("/get-dropdown-data", async (req, res) => {
+router.get("/get-dropdown-data",authenticateToken, async (req, res) => {
   try {
     // Fetch unique values for dropdowns
     const branches = await Assessment.distinct("branch");
@@ -175,7 +178,7 @@ router.get("/get-dropdown-data", async (req, res) => {
   }
 });
 
-router.post('/submit', upload.none(), async (req, res) => {
+router.post('/submit',authenticateToken, upload.none(), async (req, res) => {
 
 
 
@@ -239,26 +242,29 @@ router.post('/submit', upload.none(), async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-router.get('/attaintmentCalculation', function (req, res) {
+router.get('/attaintmentCalculation',authenticateToken, function (req, res) {
   res.render('assessment')
 })
 
 
-router.get('/calculate-assessment/:assessmentId', async (req, res) => {
+router.get('/calculate-assessment/:assessmentId',authenticateToken, async (req, res) => {
   const { assessmentId } = req.params;
   const result = await calculateAssessment(assessmentId);
   res.json(result);
 });
 
 
-router.get("/dashboard", function (req, res) {
+router.get("/dashboard", authenticateToken,function (req, res) {
+  // from all assessment records count all students 
+
+  
   res.render("home");
 })
 
-router.get("/student-data", function (req, res) {
+router.get("/student-data", authenticateToken,function (req, res) {
   res.render("step2");
 })
-router.post("/step2", async function (req, res) {
+router.post("/step2", authenticateToken,async function (req, res) {
   try {
     const data = req.body;
     console.log(data);
@@ -309,7 +315,7 @@ router.post("/step2", async function (req, res) {
   }
 });
 
-router.get('/attainment', async (req, res) => {
+router.get('/attainment', authenticateToken,async (req, res) => {
   try {
       const { semester, batch, courseCode } = req.query;
 
