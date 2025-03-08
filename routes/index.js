@@ -11,7 +11,7 @@ const calculateAssessment = require('../utils/calculateAssessment');
 const AssessmentRecord = require('../models/assessmentRecordsSchema');
 
 /* GET home page. */
-router.get('/', authenticateToken, function (req, res, next) {
+router.get('/assessment-tools', authenticateToken, function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 router.get('/login', function (req, res, next) {
@@ -251,17 +251,18 @@ router.get('/calculate-assessment/:assessmentId', async (req, res) => {
 });
 
 
-router.get("/home", function (req, res) {
+router.get("/dashboard", function (req, res) {
   res.render("home");
 })
 
-router.get("/step2", function (req, res) {
+router.get("/student-data", function (req, res) {
   res.render("step2");
 })
 router.post("/step2", async function (req, res) {
   try {
     const data = req.body;
-
+    console.log(data);
+    
     if (!data || !data.students) {
       return res.status(400).json({ error: "Invalid data format" });
     }
@@ -313,7 +314,9 @@ router.get('/attainment', async (req, res) => {
       const { semester, batch, courseCode } = req.query;
 
       // Step 1: Fetch the relevant assessment
-      const assessment = await Assessment.findOne({ semester, batch, courseCode });
+      // const assessment = await AssessmentRecord.findOne({ semester, batch, courseCode });
+      // fetch only latest
+      const assessment = await AssessmentRecord.findOne({ semester,batch, courseCode }).sort({ createdAt: -1 });
 
       if (!assessment) {
           return res.status(404).json({ message: "Assessment not found" });
