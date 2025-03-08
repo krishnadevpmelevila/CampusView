@@ -1,17 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
+// Define Question Schema (Includes marks obtained)
 const QuestionSchema = new mongoose.Schema({
   questionNumber: String,
   coNumber: String,
   bloomsTaxonomy: String,
   maxMarks: String,
+  marksObtained: String, // <-- Added field
 });
 
+// Define Tool Schema (Each tool has questions)
 const ToolSchema = new mongoose.Schema({
   toolName: String,
   questions: [QuestionSchema],
 });
 
+// Define Student Schema (Each student has their tools)
+const StudentSchema = new mongoose.Schema({
+  name: String,
+  roll: String,
+  tools: [ToolSchema],
+});
+
+// Define Assessment Schema (Includes students)
 const AssessmentSchema = new mongoose.Schema({
   branch: String,
   subject: String,
@@ -26,8 +37,9 @@ const AssessmentSchema = new mongoose.Schema({
   assessmentYear: String,
   facultyName: String,
   tools: [ToolSchema],
+  students: [StudentSchema], // <-- Added students here
 });
 
-const Assessment = mongoose.model('Assessment', AssessmentSchema);
+const Assessment = mongoose.model("Assessment", AssessmentSchema);
 
 module.exports = Assessment;

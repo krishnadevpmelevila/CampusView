@@ -7,7 +7,7 @@ const upload = multer(); // Initialize multer
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const authenticateToken = require('../middlewares/auth');
-
+const calculateAssessment = require('../utils/calculateAssessment');
 /* GET home page. */
 router.get('/', authenticateToken, function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -102,43 +102,43 @@ router.post('/logout', (req, res) => {
 });
 router.get("/get-filtered-assessment-data", async (req, res) => {
   try {
-      const { branch, semester, subject, courseCode, batch, numCOs, numPOs, numPSOs, faculty, assessmentYear } = req.query;
+    const { branch, semester, subject, courseCode, batch, numCOs, numPOs, numPSOs, faculty, assessmentYear } = req.query;
 
-      // Build query object dynamically
-      const query = {};
-      if (branch) query.branch = branch;
-      if (semester) query.semester = semester;
-      if (subject) query.subject = subject;
-      if (courseCode) query.courseCode = courseCode;
-      if (batch) query.batch = batch;
-      if (numCOs) query.numCOs = numCOs;
-      if (numPOs) query.numPOs = numPOs;
-      if (numPSOs) query.numPSOs = numPSOs;
-      if (faculty) query.facultyName = faculty;
-      if (assessmentYear) query.assessmentYear = assessmentYear;
+    // Build query object dynamically
+    const query = {};
+    if (branch) query.branch = branch;
+    if (semester) query.semester = semester;
+    if (subject) query.subject = subject;
+    if (courseCode) query.courseCode = courseCode;
+    if (batch) query.batch = batch;
+    if (numCOs) query.numCOs = numCOs;
+    if (numPOs) query.numPOs = numPOs;
+    if (numPSOs) query.numPSOs = numPSOs;
+    if (faculty) query.facultyName = faculty;
+    if (assessmentYear) query.assessmentYear = assessmentYear;
 
-      // Fetch assessments based on query filters
-      const assessments = await Assessment.find(query);
+    // Fetch assessments based on query filters
+    const assessments = await Assessment.find(query);
 
-      // Format Data as Required
-      const formattedData = {
-          tools: assessments.flatMap(assessment =>
-              assessment.tools.map(tool => ({
-                  name: tool.toolName,
-                  questions: tool.questions.map((q, index) => ({
-                      id: `Q${index + 1}`, // Auto-generate Q1, Q2, etc.
-                      co: q.coNumber,
-                      blooms: q.bloomsTaxonomy,
-                      maxMarks: parseInt(q.maxMarks, 10) || 0
-                  }))
-              }))
-          )
-      };
+    // Format Data as Required
+    const formattedData = {
+      tools: assessments.flatMap(assessment =>
+        assessment.tools.map(tool => ({
+          name: tool.toolName,
+          questions: tool.questions.map((q, index) => ({
+            id: `Q${index + 1}`, // Auto-generate Q1, Q2, etc.
+            co: q.coNumber,
+            blooms: q.bloomsTaxonomy,
+            maxMarks: parseInt(q.maxMarks, 10) || 0
+          }))
+        }))
+      )
+    };
 
-      res.json(formattedData);
+    res.json(formattedData);
   } catch (error) {
-      console.error("Error fetching filtered assessment data:", error);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching filtered assessment data:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -175,20 +175,20 @@ router.get("/get-dropdown-data", async (req, res) => {
 
 router.post('/submit', upload.none(), async (req, res) => {
 
- 
-  
+
+
   try {
     if (!req.body.tool || !Array.isArray(req.body.tool) || req.body.tool.length === 0) {
       return res.status(400).json({ message: "Invalid assessment tools data." });
     }
-    
+
     // Utility function to ensure arrays are properly formatted
     const parseArray = (data) => {
       if (!data) return [];
       if (Array.isArray(data)) return data;
       return Object.values(data); // Convert object to array (Fixes multer issue)
     };
-    
+
     const finalData = {
       branch: req.body.branch || "",
       subject: req.body.subject || "",
@@ -207,7 +207,7 @@ router.post('/submit', upload.none(), async (req, res) => {
         const coNumbers = parseArray(req.body.coNumber?.[index]);
         const bloomsTaxonomy = parseArray(req.body.bloomsTaxonomy?.[index]);
         const maxMarks = parseArray(req.body.maxMarks?.[index]);
-    
+
         return {
           toolName: tool,
           questions: questions.map((q, i) => ({
@@ -219,24 +219,35 @@ router.post('/submit', upload.none(), async (req, res) => {
         };
       }),
     };
-    
+
     // Save to MongoDB
     try {
       const newAssessment = new Assessment(finalData);
       await newAssessment.save();
-    
+
       console.log("Final Data Saved:", JSON.stringify(finalData, null, 2));
       res.status(201).json({ message: "Data successfully saved!" });
     } catch (error) {
       console.error("Error saving data:", error);
       res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
-    
+
   } catch (error) {
     console.error("Error saving data:", error);
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
+router.get('/attaintmentCalculation', function (req, res) {
+  res.render('assessment')
+})
+
+
+router.get('/calculate-assessment/:assessmentId', async (req, res) => {
+  const { assessmentId } = req.params;
+  const result = await calculateAssessment(assessmentId);
+  res.json(result);
+});
+
 
 router.get("/home", function (req, res) {
   res.render("home");
@@ -245,11 +256,55 @@ router.get("/home", function (req, res) {
 router.get("/step2", function (req, res) {
   res.render("step2");
 })
-router.post("/step2", function (req, res) {
-  const data = req.body;
-  console.log(data);
+router.post("/step2", async function (req, res) {
+  try {
+    const data = req.body;
 
-  res.send(data)
-})
+    if (!data || !data.students) {
+      return res.status(400).json({ error: "Invalid data format" });
+    }
+
+    // Convert students object into an array
+    const students = Object.values(data.students).map((student) => ({
+      name: student.name,
+      roll: student.roll,
+      tools: Object.entries(student.tools).map(([toolName, toolData]) => ({
+        toolName: toolName,
+        questions: toolData.questions.map((q) => ({
+          questionNumber: q.questionId,
+          coNumber: q.co,
+          bloomsTaxonomy: q.blooms,
+          maxMarks: q.maxMarks,
+          marksObtained: q.marksObtained, // Store marks obtained
+        })),
+      })),
+    }));
+
+    // Create and save Assessment document
+    const assessment = new Assessment({
+      branch: data.branch,
+      subject: data.subject,
+      semester: data.semester,
+      courseCode: data.courseCode.trim(),
+      batch: data.batch,
+      numCOs: data.numCOs || "N/A",
+      numStudents: data.numStudents || students.length.toString(), // Auto count students
+      numPOs: data.numPOs || "N/A",
+      numPSOs: data.numPSOs || "N/A",
+      universityExam: data.universityExam || "N/A",
+      assessmentYear: data.assessmentYear || "N/A",
+      facultyName: data.facultyName || "N/A",
+      students: students, // Store student data
+    });
+
+    await assessment.save(); // Save to MongoDB
+
+    res.status(201).json({ message: "Assessment data saved successfully!" });
+  } catch (error) {
+    console.error("Error saving data:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
 
