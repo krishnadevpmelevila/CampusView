@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const authenticateToken = require('../middlewares/auth');
 const calculateAssessment = require('../utils/calculateAssessment');
+const AssessmentRecord = require('../models/assessmentRecordsSchema');
+
 /* GET home page. */
 router.get('/', authenticateToken, function (req, res, next) {
   res.render('index', { title: 'Express' });
@@ -280,8 +282,8 @@ router.post("/step2", async function (req, res) {
       })),
     }));
 
-    // Create and save Assessment document
-    const assessment = new Assessment({
+    // Create and save in AssessmentRecords collection
+    const assessmentRecord = new AssessmentRecord({
       branch: data.branch,
       subject: data.subject,
       semester: data.semester,
@@ -297,14 +299,68 @@ router.post("/step2", async function (req, res) {
       students: students, // Store student data
     });
 
-    await assessment.save(); // Save to MongoDB
+    await assessmentRecord.save(); // Save to MongoDB
 
-    res.status(201).json({ message: "Assessment data saved successfully!" });
+    res.status(201).json({ message: "Assessment record saved successfully!" });
   } catch (error) {
     console.error("Error saving data:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
+router.get('/attainment', async (req, res) => {
+  try {
+      const { semester, batch, courseCode } = req.query;
+
+      // Step 1: Fetch the relevant assessment
+      const assessment = await Assessment.findOne({ semester, batch, courseCode });
+
+      if (!assessment) {
+          return res.status(404).json({ message: "Assessment not found" });
+      }
+
+      // Step 2: Process student marks grouped by CO
+      const studentMarks = {};
+
+      assessment.students.forEach(student => {
+          studentMarks[student.roll] = {
+              name: student.name,
+              roll: student.roll,
+              marksByCO: {},
+              totalMarksByCO: {},
+              percentageByCO: {}
+          };
+
+          student.tools.forEach(tool => {
+              tool.questions.forEach(question => {
+                  const co = question.coNumber;
+                  const obtainedMarks = parseFloat(question.marksObtained) || 0;
+                  const maxMarks = parseFloat(question.maxMarks) || 0;
+
+                  if (!studentMarks[student.roll].marksByCO[co]) {
+                      studentMarks[student.roll].marksByCO[co] = 0;
+                      studentMarks[student.roll].totalMarksByCO[co] = 0;
+                  }
+
+                  studentMarks[student.roll].marksByCO[co] += obtainedMarks;
+                  studentMarks[student.roll].totalMarksByCO[co] += maxMarks;
+              });
+          });
+
+          // Step 3: Calculate Percentage for each CO
+          Object.keys(studentMarks[student.roll].marksByCO).forEach(co => {
+              const obtained = studentMarks[student.roll].marksByCO[co];
+              const total = studentMarks[student.roll].totalMarksByCO[co];
+              studentMarks[student.roll].percentageByCO[co] = total > 0 ? ((obtained / total) * 100).toFixed(2) : 0;
+          });
+      });
+
+      return res.json({ students: Object.values(studentMarks) });
+
+  } catch (error) {
+      console.error("Error fetching attainment data:", error);
+      res.status(500).json({ message: "Server Error" });
+  }
+});
 module.exports = router;
 

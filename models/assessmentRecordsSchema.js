@@ -39,8 +39,23 @@ const AssessmentSchema = new mongoose.Schema({
   tools: [ToolSchema],
   students: [StudentSchema], // <-- Added students here
 });
+// Assessment Records Schema
+const AssessmentRecordsSchema = new mongoose.Schema({
+  branch: String,
+  subject: String,
+  semester: String,
+  courseCode: String,
+  batch: String,
+  numCOs: String,
+  numStudents: String,
+  numPOs: String,
+  numPSOs: String,
+  universityExam: String,
+  assessmentYear: String,
+  facultyName: String,
+  students: [StudentSchema], // Store student data separately
+  createdAt: { type: Date, default: Date.now } // Timestamp for records
+});
 
-const Assessment = mongoose.model("Assessment", AssessmentSchema);
-
-
-module.exports = Assessment;
+const AssessmentRecords = mongoose.model("AssessmentRecords", AssessmentRecordsSchema);
+module.exports = AssessmentRecords;
