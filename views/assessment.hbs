@@ -3,275 +3,409 @@
 
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Assessment Input</title>
+    <title>Assessment Result</title>
     <style>
+        :root {
+            --primary-color: #4154f1;
+            --primary-hover: #3a45d6;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f6f9ff;
+            color: #444444;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 280px;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
             padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
+            z-index: 999;
+            transition: var(--transition);
         }
 
-        h2,
-        h3 {
-            color: #0056b3;
-        }
-
-        form {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin: 10px 0;
+        .sidebar-header {
+            display: flex;
+            align-items: center;
             font-weight: bold;
-        }
-
-        input,
-        select,
-        button {
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        /* Ensure table takes full width without breaking */
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            /* Scroll if too wide */
+            padding-bottom: 20px;
             margin-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 22px;
         }
 
-        /* Style the tables properly */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: auto;
-            /* Allow columns to adjust */
+        .sidebar-header .view-text {
+            color: var(--primary-color);
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            white-space: nowrap;
-            /* Prevent breaking inside cells */
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: #012970;
+            font-weight: 500;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: var(--transition);
         }
 
-        /* Ensure headers align properly */
-        th {
-            white-space: normal;
-            /* Allow wrapping */
-            word-wrap: break-word;
-            text-align: center;
-            padding: 10px;
-            min-width: 100px;
-            /* Prevent excessive compression */
-            max-width: 150px;
-            /* Limit width to avoid too-wide columns */
+        .sidebar-link:hover {
+            background-color: #f6f9ff;
+            color: var(--primary-color);
         }
 
-        /* Fix input fields inside tables */
-        td input {
-            width: 100%;
-            padding: 5px;
-            box-sizing: border-box;
-            /* Ensure proper width calculation */
+        .sidebar-link.active {
+            background-color: #f6f9ff;
+            color: var(--primary-color);
         }
 
-        /* Ensure each student row is evenly spaced */
-        tr {
-            height: 50px;
+        .sidebar-link i {
+            margin-right: 10px;
+            font-size: 18px;
         }
 
-        /* Remove the border from empty inputs */
-        td input[readonly] {
-            background: #f9f9f9;
+        .sidebar-logout {
+            margin-top: auto;
+        }
+
+        .header {
+            background-color: white;
+            box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 280px;
+            z-index: 998;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #012970;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile {
+            font-weight: bold;
+            color: #012970;
+        }
+
+        .user-role {
+            color: #899bbd;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 80px 30px 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
             border: none;
+            margin-bottom: 30px;
+            padding: 20px;
         }
 
-        /* Responsive fix for smaller screens */
-        @media (max-width: 768px) {
-            th {
-                font-size: 12px;
-                /* Reduce font size on smaller screens */
-                min-width: 80px;
-                /* Adjust width for mobile */
-            }
+        .form-label {
+            font-weight: 600;
+            color: #012970;
         }
 
-
-        button {
-            background-color: #0056b3;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
+        .form-select,
+        .form-control {
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: var(--border-radius);
         }
 
-        button:hover {
-            background-color: #004494;
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 10px 20px;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
         }
 
         .table-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
             margin-bottom: 30px;
         }
 
-        .student-info {
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background-color: #f6f9ff;
+            color: #012970;
+            padding: 12px;
+            font-weight: 600;
+        }
+
+        .table td {
+            padding: 12px;
+            border: 1px solid #efefef;
+        }
+
+        .attainment-level-high {
+            background-color: #d1e7dd;
+            color: #155724;
+        }
+
+        .attainment-level-medium {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .attainment-level-low {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .student-category-bright {
+            background-color: #d1e7dd;
+            color: #155724;
             font-weight: bold;
-            color: #333;
+        }
+
+        .student-category-average {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+        }
+
+        .student-category-weak {
+            background-color: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            color: var(--primary-color);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+
+            .header,
+            .main-content {
+                left: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                padding: 0;
+            }
+
+            .header,
+            .main-content {
+                left: 0;
+            }
+
+            th {
+                font-size: 12px;
+                min-width: 80px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <header class="d-flex justify-content-end align-items-center bg-primary p-3">
-        <div class="md-6">
-            <a href="/home" id="homeButton" class="btn btn-light fw-bold shadow">
-                Home
-            </a>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            CAMPUS <span class="view-text">VIEW</span>
         </div>
-        <div class="md-6">
-            <button id="logoutButton" class="btn btn-light fw-bold shadow">
-                Logout
+
+        <a href="/dashboard" class="sidebar-link ">
+            <i class="bi bi-grid"></i> Dashboard
+        </a>
+
+        {{#if user.admin}}
+        <a href="/assessment-tools" class="sidebar-link">
+            <i class="bi bi-tools"></i> Add Assessment Tools
+        </a>
+       
+        {{/if}}
+
+        {{!-- /if --}}
+        <a href="/student-data" class="sidebar-link">
+            <i class="bi bi-mortarboard"></i> Add Student Data
+        </a>
+
+        <a href="/attaintmentCalculation" class="sidebar-link active">
+            <i class="bi bi-calculator"></i> Attainment Calculation
+        </a>
+
+        <a href="/logout" class="sidebar-link sidebar-logout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+    </aside>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="header-title">Assessment Result</h1>
+
+        <div class="d-flex align-items-center">
+
+
+            <div class="user-info ms-4 user-profile">
+                <img src="/images/image.png" width="40px" alt="User Profile" class="rounded-circle">
+                <div class="ms-2">
+                    {{#if user.admin}}
+                    <div class="user-profile">Admin</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+                {{else}}
+                <div class="user-profile">User</div>
+                <div class="user-role">Staff</div>
+                {{/if}}
+            </div>
+
+            <button class="theme-toggle ms-3">
+                <i class="bi bi-moon"></i>
             </button>
         </div>
-
     </header>
 
-    <h2>Dynamic Student Assessment Entry</h2>
+    <!-- Main Content -->
+    <div class="container mt-5">
+        <main class="main-content">
+            <form id="attainmentForm" class="card">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="branchDropdown" class="form-label">Branch</label>
+                        <select id="branchDropdown" class="form-select" required>
+                            <option value="">Select Branch</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="assessmentYear" class="form-label">Assessment Year</label>
+                        <select id="assessmentYear" class="form-select" required>
+                            <option value="">Select Year</option>
+                        </select>
+                    </div>
+                </div>
 
-    <form id="assessmentForm">
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="branchDropdown" class="form-label">Branch</label>
-                <select id="branchDropdown" class="form-select" required>
-                    <option value="">Select Branch</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="assessmentYear" class="form-label">Assessment Year</label>
-                <select id="assessmentYear" class="form-select" required>
-                    <option value="">Select Year</option>
-                </select>
-            </div>
-        </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="semesterDropdown" class="form-label">Semester</label>
+                        <select id="semesterDropdown" class="form-select" required>
+                            <option value="">Select Semester</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="subjectDropdown" class="form-label">Subject</label>
+                        <select id="subjectDropdown" class="form-select" required>
+                            <option value="">Select Subject</option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="semesterDropdown" class="form-label">Semester</label>
-                <select id="semesterDropdown" class="form-select" required>
-                    <option value="">Select Semester</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label for="subjectDropdown" class="form-label">Subject</label>
-                <select id="subjectDropdown" class="form-select" required>
-                    <option value="">Select Subject</option>
-                </select>
-            </div>
-        </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="facultyDropdown" class="form-label">Faculty Name</label>
+                        <select id="facultyDropdown" class="form-select" required>
+                            <option value="">Select Faculty</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="courseCode" class="form-label">Course Code</label>
+                        <input type="text" id="courseCode" class="form-control" required readonly>
+                    </div>
+                </div>
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="facultyDropdown" class="form-label">Faculty Name</label>
-                <select id="facultyDropdown" class="form-select" required>
-                    <option value="">Select Faculty</option>
-                </select>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="batch" class="form-label">Batch</label>
+                        <select id="batch" class="form-select" required>
+                            <option value="">Select Batch</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Loading indicator -->
+            <div id="loadingIndicator" class="loading" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p>Loading attainment data...</p>
             </div>
-            <div class="col-md-6">
-                <label for="courseCode" class="form-label">Course Code</label>
-                <input type="text" id="courseCode" class="form-control" required readonly>
+
+            <!-- Results container -->
+            <div id="attainmentResults" style="display: none;">
+                <div class="card">
+                    <h3 class="mb-4 text-primary">Course Outcome Attainment Data</h3>
+                    <div id="attainmentTableContainer" class="table-container"></div>
+                </div>
             </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="batch" class="form-label">Batch</label>
-                <select id="batch" class="form-select" required>
-                    <option value="">Select Batch</option>
-                </select>
-            </div>
-        </div>
-        <h3>Student Details</h3>
-        <div id="studentList">
-            <div class="student-entry">
-                <label>Student Name: <input type="text" id="studentName" name="studentName[]"></label>
-                <label>Roll Number: <input type="text" id="rollNumber" name="rollNumber[]"></label>
-                <button type="button" class="remove-student-btn" onclick="removeStudent(this)">Remove</button>
-            </div>
-        </div>
-        <button type="button" onclick="addStudent()">Add Student</button>
-
-
-        <h3>Assessment Tools & Questions</h3>
-        <div id="assessmentToolsSection"></div>
-
-
-        <br><br>
-        <button type="submit">Submit</button>
-    </form>
+        </main>
+    </div>
 
     <script>
-
-
-        async function fetchFilteredAssessmentData() {
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
-
-            // Construct URL with Query Parameters
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
-
-            try {
-                const response = await fetch(`/get-filtered-assessment-data?${queryParams}`);
-                const data = await response.json();
-
-                console.log("Filtered Assessment Data:", data);
-                generateAssessmentTools(data.tools);
-            } catch (error) {
-                console.error("Error fetching assessment data:", error);
-            }
-        }
-
-        // Call this function when any dropdown changes
-        document.getElementById("branchDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("semesterDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("subjectDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("courseCode").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("batch").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("facultyDropdown").addEventListener("change", fetchFilteredAssessmentData);
-        document.getElementById("assessmentYear").addEventListener("change", fetchFilteredAssessmentData);
-
         document.addEventListener("DOMContentLoaded", async () => {
             try {
                 // Fetch dropdown data from API
                 const response = await fetch("/get-dropdown-data");
                 const data = await response.json();
 
-                console.log("Dropdown Data Received:", data); // Debugging output
+                console.log("Dropdown Data Received:", data);
 
                 // Get all dropdown elements
                 const branchDropdown = document.getElementById("branchDropdown");
@@ -281,6 +415,10 @@
                 const batchDropdown = document.getElementById("batch");
                 const facultyDropdown = document.getElementById("facultyDropdown");
                 const assessmentYearDropdown = document.getElementById("assessmentYear");
+                const form = document.getElementById("attainmentForm");
+                const attainmentResults = document.getElementById("attainmentResults");
+                const attainmentTableContainer = document.getElementById("attainmentTableContainer");
+                const loadingIndicator = document.getElementById("loadingIndicator");
 
                 // Populate Branch Dropdown
                 populateDropdown(branchDropdown, data.branches);
@@ -301,6 +439,9 @@
                     resetDropdown(batchDropdown);
                     resetDropdown(assessmentYearDropdown);
 
+                    // Hide any previously displayed results
+                    attainmentResults.style.display = "none";
+
                     if (branchData[selectedBranch]) {
                         // Populate Semesters
                         populateDropdown(semesterDropdown, branchData[selectedBranch].semesters);
@@ -318,6 +459,8 @@
                     resetDropdown(subjectDropdown);
                     resetDropdown(facultyDropdown);
 
+                    // Hide any previously displayed results
+                    attainmentResults.style.display = "none";
 
                     if (branchData[selectedBranch]) {
                         populateDropdown(subjectDropdown, branchData[selectedBranch].subjects);
@@ -329,15 +472,389 @@
                     const selectedBranch = branchDropdown.value;
                     resetDropdown(facultyDropdown);
 
-
                     if (branchData[selectedBranch]) {
                         populateDropdown(facultyDropdown, branchData[selectedBranch].faculty);
                         populateTextInput(courseCodeInput, branchData[selectedBranch].courseCodes);
                     }
                 });
 
-                // Event Listener for Course Code Selection
+                // Handle Form Submission
+                form.addEventListener("submit", async function (event) {
+                    event.preventDefault(); // Prevent default form submission
 
+                    // Get selected values
+                    const branch = branchDropdown.value;
+                    const assessmentYear = assessmentYearDropdown.value;
+                    const semester = semesterDropdown.value;
+                    const subject = subjectDropdown.value;
+                    const faculty = facultyDropdown.value;
+                    const batch = batchDropdown.value;
+                    const courseCode = courseCodeInput.value;
+
+                    if (!branch || !assessmentYear || !semester || !subject || !faculty || !batch || !courseCode) {
+                        alert("Please select all required fields.");
+                        return;
+                    }
+
+                    try {
+                        // Show loading indicator
+                        loadingIndicator.style.display = "block";
+                        attainmentResults.style.display = "none";
+
+                        // Fetch attainment data
+                        const attainmentResponse = await fetch(`/attainment?semester=${semester}&batch=${batch}&courseCode=${courseCode}`);
+                        const attainmentData = await attainmentResponse.json();
+
+                        console.log("Attainment Data:", attainmentData);
+
+                        // Hide loading indicator
+                        loadingIndicator.style.display = "none";
+
+                        // Create and display the attainment data table
+                        displayAttainmentData(attainmentData);
+                    } catch (error) {
+                        console.error("Error fetching attainment data:", error);
+                        loadingIndicator.style.display = "none";
+                        alert("Failed to fetch attainment data. Please try again.");
+                    }
+                });
+
+                // Function to display attainment data in table format
+                function displayAttainmentData(data) {
+                    // Clear previous results
+                    attainmentTableContainer.innerHTML = "";
+
+                    if (!data || !data.students || data.students.length === 0) {
+                        attainmentTableContainer.innerHTML = "<p>No attainment data available for the selected criteria.</p>";
+                        attainmentResults.style.display = "block";
+                        return;
+                    }
+
+                    // Extract course outcomes (COs) from the first student
+                    const firstStudent = data.students[0];
+                    const courseOutcomes = Object.keys(firstStudent.marksByCO || {});
+
+                    if (courseOutcomes.length === 0) {
+                        attainmentTableContainer.innerHTML = "<p>No course outcome data available.</p>";
+                        attainmentResults.style.display = "block";
+                        return;
+                    }
+
+                    // Create main table
+                    const mainTable = document.createElement("table");
+                    mainTable.className = "table table-striped table-bordered";
+
+                    // Create table header
+                    const thead = document.createElement("thead");
+                    const headerRow = document.createElement("tr");
+
+                    // Base headers (Student Name, Roll No)
+                    addHeaderCell(headerRow, "Student Name");
+                    addHeaderCell(headerRow, "Roll No");
+
+                    // Add CO-specific headers - three columns per CO
+                    courseOutcomes.forEach(co => {
+                        addHeaderCell(headerRow, `${co} Marks`);
+                        addHeaderCell(headerRow, `${co} Total`);
+                        addHeaderCell(headerRow, `${co} Percentage %`);
+                    });
+
+                    // Add Student Category header
+                    addHeaderCell(headerRow, "Student Category");
+
+                    thead.appendChild(headerRow);
+                    mainTable.appendChild(thead);
+
+                    // Create table body
+                    const tbody = document.createElement("tbody");
+
+                    // Add student rows
+                    data.students.forEach(student => {
+                        const row = document.createElement("tr");
+
+                        // Add student name and roll
+                        addCell(row, student.name);
+                        addCell(row, student.roll);
+
+                        // Calculate average percentage across all COs for this student
+                        let totalPercentage = 0;
+                        let validCOCount = 0;
+
+                        // Add CO-specific data
+                        courseOutcomes.forEach(co => {
+                            // Marks for this CO
+                            addCell(row, student.marksByCO[co] || "-");
+
+                            // Total marks for this CO
+                            addCell(row, student.totalMarksByCO[co] || "-");
+
+                            // Percentage for this CO - with color coding
+                            const percentage = student.percentageByCO[co] || "-";
+                            const percentageCell = document.createElement("td");
+                            percentageCell.className = "percentage-cell";
+                            percentageCell.textContent = percentage;
+
+                            // Add color coding based on percentage
+                            if (percentage !== "-") {
+                                const percentValue = parseFloat(percentage);
+                                if (percentValue >= 70) {
+                                    percentageCell.classList.add("attainment-level-high");
+                                } else if (percentValue >= 60) {
+                                    percentageCell.classList.add("attainment-level-medium");
+                                } else {
+                                    percentageCell.classList.add("attainment-level-low");
+                                }
+
+                                // Add to total for category calculation
+                                totalPercentage += percentValue;
+                                validCOCount++;
+                            }
+
+                            row.appendChild(percentageCell);
+                        });
+
+                        // Calculate student category based on average percentage
+                        const avgPercentage = validCOCount > 0 ? totalPercentage / validCOCount : 0;
+                        let studentCategory = "";
+                        let categoryClass = "";
+
+                        if (avgPercentage >= 75) {
+                            studentCategory = "Bright";
+                            categoryClass = "student-category-bright";
+                        } else if (avgPercentage >= 60) {
+                            studentCategory = "Average";
+                            categoryClass = "student-category-average";
+                        } else {
+                            studentCategory = "Weak";
+                            categoryClass = "student-category-weak";
+                        }
+
+                        // Add student category cell
+                        const categoryCell = document.createElement("td");
+                        categoryCell.textContent = studentCategory;
+                        categoryCell.className = categoryClass;
+                        row.appendChild(categoryCell);
+
+                        tbody.appendChild(row);
+                    });
+
+                    mainTable.appendChild(tbody);
+                    attainmentTableContainer.appendChild(mainTable);
+
+                    // Create summary table
+                    const summaryDiv = document.createElement("div");
+                    summaryDiv.className = "mt-4";
+
+                    const summaryHeading = document.createElement("h4");
+                    summaryHeading.textContent = "Course Outcome Attainment Summary";
+                    summaryHeading.className = "mb-3 text-primary";
+                    summaryDiv.appendChild(summaryHeading);
+
+                    const summaryTable = document.createElement("table");
+                    summaryTable.className = "table table-bordered";
+
+                    // Create summary table header
+                    const summaryThead = document.createElement("thead");
+                    const summaryHeaderRow = document.createElement("tr");
+
+                    addHeaderCell(summaryHeaderRow, "Course Outcome");
+                    addHeaderCell(summaryHeaderRow, "Average Percentage");
+                    addHeaderCell(summaryHeaderRow, "Attainment Level");
+
+                    summaryThead.appendChild(summaryHeaderRow);
+                    summaryTable.appendChild(summaryThead);
+
+                    // Create summary table body
+                    const summaryTbody = document.createElement("tbody");
+
+                    // Calculate average percentage for each CO
+                    const coSummary = {};
+
+                    courseOutcomes.forEach(co => {
+                        let totalPercentage = 0;
+                        let count = 0;
+
+                        data.students.forEach(student => {
+                            if (student.percentageByCO[co]) {
+                                totalPercentage += parseFloat(student.percentageByCO[co]);
+                                count++;
+                            }
+                        });
+
+                        const avgPercentage = count > 0 ? (totalPercentage / count).toFixed(2) : "-";
+                        let attainmentLevel = "-";
+
+                        if (avgPercentage !== "-") {
+                            const percentValue = parseFloat(avgPercentage);
+                            if (percentValue >= 70) {
+                                attainmentLevel = "3 (High)";
+                            } else if (percentValue >= 60) {
+                                attainmentLevel = "2 (Medium)";
+                            } else {
+                                attainmentLevel = "1 (Low)";
+                            }
+                        }
+
+                        coSummary[co] = {
+                            avgPercentage,
+                            attainmentLevel
+                        };
+                    });
+
+                    // Add rows to summary table
+                    Object.entries(coSummary).forEach(([co, summary]) => {
+                        const summaryRow = document.createElement("tr");
+
+                        addCell(summaryRow, co);
+
+                        // Add average percentage cell with color coding
+                        const avgPercentageCell = document.createElement("td");
+                        avgPercentageCell.textContent = summary.avgPercentage;
+
+                        if (summary.avgPercentage !== "-") {
+                            const percentValue = parseFloat(summary.avgPercentage);
+                            if (percentValue >= 70) {
+                                avgPercentageCell.classList.add("attainment-level-high");
+                            } else if (percentValue >= 60) {
+                                avgPercentageCell.classList.add("attainment-level-medium");
+                            } else {
+                                avgPercentageCell.classList.add("attainment-level-low");
+                            }
+                        }
+
+                        summaryRow.appendChild(avgPercentageCell);
+
+                        // Add attainment level cell with color coding
+                        const attainmentLevelCell = document.createElement("td");
+                        attainmentLevelCell.textContent = summary.attainmentLevel;
+
+                        if (summary.attainmentLevel.startsWith("3")) {
+                            attainmentLevelCell.classList.add("attainment-level-high");
+                        } else if (summary.attainmentLevel.startsWith("2")) {
+                            attainmentLevelCell.classList.add("attainment-level-medium");
+                        } else if (summary.attainmentLevel.startsWith("1")) {
+                            attainmentLevelCell.classList.add("attainment-level-low");
+                        }
+
+                        summaryRow.appendChild(attainmentLevelCell);
+                        summaryTbody.appendChild(summaryRow);
+                    });
+
+                    summaryTable.appendChild(summaryTbody);
+                    summaryDiv.appendChild(summaryTable);
+                    attainmentTableContainer.appendChild(summaryDiv);
+
+                    // Create student category summary
+                    const categorySummaryDiv = document.createElement("div");
+                    categorySummaryDiv.className = "mt-4";
+
+                    const categorySummaryHeading = document.createElement("h4");
+                    categorySummaryHeading.textContent = "Student Category Summary";
+                    categorySummaryHeading.className = "mb-3 text-primary";
+                    categorySummaryDiv.appendChild(categorySummaryHeading);
+
+                    const categorySummaryTable = document.createElement("table");
+                    categorySummaryTable.className = "table table-bordered";
+
+                    // Create category summary table header
+                    const categorySummaryThead = document.createElement("thead");
+                    const categorySummaryHeaderRow = document.createElement("tr");
+
+                    addHeaderCell(categorySummaryHeaderRow, "Category");
+                    addHeaderCell(categorySummaryHeaderRow, "Number of Students");
+                    addHeaderCell(categorySummaryHeaderRow, "Percentage");
+
+                    categorySummaryThead.appendChild(categorySummaryHeaderRow);
+                    categorySummaryTable.appendChild(categorySummaryThead);
+
+                    // Create category summary table body
+                    const categorySummaryTbody = document.createElement("tbody");
+
+                    // Calculate category counts
+                    let brightCount = 0;
+                    let averageCount = 0;
+                    let weakCount = 0;
+                    const totalStudents = data.students.length;
+
+                    data.students.forEach(student => {
+                        let totalPercentage = 0;
+                        let validCOCount = 0;
+
+                        courseOutcomes.forEach(co => {
+                            if (student.percentageByCO[co]) {
+                                totalPercentage += parseFloat(student.percentageByCO[co]);
+                                validCOCount++;
+                            }
+                        });
+
+                        const avgPercentage = validCOCount > 0 ? totalPercentage / validCOCount : 0;
+
+                        if (avgPercentage >= 75) {
+                            brightCount++;
+                        } else if (avgPercentage >= 60) {
+                            averageCount++;
+                        } else {
+                            weakCount++;
+                        }
+                    });
+
+                    // Add category rows
+                    // Bright students
+                    const brightRow = document.createElement("tr");
+                    const brightCell = document.createElement("td");
+                    brightCell.textContent = "Bright";
+                    brightCell.classList.add("student-category-bright");
+                    brightRow.appendChild(brightCell);
+
+                    addCell(brightRow, brightCount);
+                    addCell(brightRow, ((brightCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(brightRow);
+
+                    // Average students
+                    const averageRow = document.createElement("tr");
+                    const averageCell = document.createElement("td");
+                    averageCell.textContent = "Average";
+                    averageCell.classList.add("student-category-average");
+                    averageRow.appendChild(averageCell);
+
+                    addCell(averageRow, averageCount);
+                    addCell(averageRow, ((averageCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(averageRow);
+
+                    // Weak students
+                    const weakRow = document.createElement("tr");
+                    const weakCell = document.createElement("td");
+                    weakCell.textContent = "Weak";
+                    weakCell.classList.add("student-category-weak");
+                    weakRow.appendChild(weakCell);
+
+                    addCell(weakRow, weakCount);
+                    addCell(weakRow, ((weakCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(weakRow);
+
+                    categorySummaryTable.appendChild(categorySummaryTbody);
+                    categorySummaryDiv.appendChild(categorySummaryTable);
+                    attainmentTableContainer.appendChild(categorySummaryDiv);
+
+                    // Show the results container
+                    attainmentResults.style.display = "block";
+                }
+
+                // Helper function to add a header cell
+                function addHeaderCell(row, content) {
+                    const cell = document.createElement("th");
+                    cell.textContent = content;
+                    row.appendChild(cell);
+                    return cell;
+                }
+
+                // Helper function to add a cell to a row
+                function addCell(row, content) {
+                    const cell = document.createElement("td");
+                    cell.textContent = content;
+                    row.appendChild(cell);
+                    return cell;
+                }
 
                 // Helper Functions
                 function populateDropdown(dropdown, items) {
@@ -361,305 +878,14 @@
                     dropdown.innerHTML = '<option value="">Select</option>';
                 }
 
-                function resetInput(input) {
-                    input.value = "";
-                }
-
             } catch (error) {
                 console.error("Error loading dropdown data:", error);
             }
         });
 
-        // Add Students Dynamically
-        // Function to Add Students Dynamically
-
-
-        // Function to Remove Student Entry
-        function removeStudent(button) {
-            button.parentElement.remove();
-        }
-
-        // Add Assessment Tool
-
-
-        // Remove Assessment Tool
-        function removeAssessmentTool(button) {
-            button.parentElement.remove();
-        }
-
-        // Add Question to Tool
-        function addQuestion(button) {
-            const container = button.parentElement.querySelector(".questions-container");
-            const div = document.createElement("div");
-            div.classList.add("question");
-            div.innerHTML = `
-        <label>Question No: <input type="number" name="questions[]" required></label>
-        <label>CO Number: <input type="text" name="coNumber[]" required></label>
-        <label>Bloom's Taxonomy: <input type="text" name="bloomsTaxonomy[]" required></label>
-        <label>Max Marks: <input type="number" name="maxMarks[]" required></label>
-        <button type="button" onclick="removeQuestion(this)">Remove Question</button>
-    `;
-            container.appendChild(div);
-        }
-
-        // Remove Question
-        function removeQuestion(button) {
-            button.parentElement.remove();
-        }
-
-
-
-
-        let studentCount = 0;
-
-        function generateAssessmentTools(tools) {
-            const assessmentToolsSection = document.getElementById("assessmentToolsSection");
-            assessmentToolsSection.innerHTML = ""; // Clear previous content
-
-            tools.forEach(tool => {
-                // Create a container for each tool
-                const toolContainer = document.createElement("div");
-                toolContainer.classList.add("table-container");
-                toolContainer.innerHTML = `<h3>${tool.name}</h3>`;
-
-                // Create the table
-                const table = document.createElement("table");
-                table.innerHTML = `
-            <thead>
-                <tr>
-                    <th>Student Name</th>
-                    <th>Roll Number</th>
-                    ${tool.questions
-                        .map(q => `<th>Q${q.id}<br>CO: ${q.co}<br>(${q.blooms}, Max: ${q.maxMarks})</th>`)
-                        .join("")}
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="${tool.name}-questions">
-                <!-- Students will be added dynamically here -->
-            </tbody>
-        `;
-
-                toolContainer.appendChild(table);
-                assessmentToolsSection.appendChild(toolContainer);
-            });
-        }
-
-
-
-        async function addStudent() {
-            const studentName = document.getElementById('studentName').value.trim();
-            const rollNumber = document.getElementById('rollNumber').value.trim();
-
-            if (!studentName || !rollNumber) {
-                alert("Please enter both Student Name and Roll Number.");
-                return;
-            }
-
-            // Get dynamic assessment data
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
-
-            // Ensure all required fields are filled before fetching
-            if (!branch || !semester || !assessmentYear) {
-                alert("Please select Branch, Semester, and Assessment Year before adding students.");
-                return;
-            }
-
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
-
-            try {
-                // Fetch updated assessment data
-                const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
-
-                console.log("Updated Assessment Data:", data);
-
-                if (!data.tools || data.tools.length === 0) {
-                    alert("No assessment tools found for the selected filters.");
-                    return;
-                }
-
-                // Increase student count
-                studentCount++;
-
-                // Loop through each tool and add student row
-                data.tools.forEach(tool => {
-                    const tableBody = document.getElementById(`${tool.name}-questions`);
-                    if (!tableBody) {
-                        console.warn(`Table body not found for tool: ${tool.name}`);
-                        return;
-                    }
-
-                    const studentRow = document.createElement('tr');
-                    const studentRowId = `studentRow${studentCount}-${tool.name}`; // Unique row ID
-
-                    studentRow.id = studentRowId;
-                    studentRow.innerHTML = `
-                <td><input type="text" value="${studentName}" readonly></td>
-                <td><input type="text" value="${rollNumber}" readonly></td>
-                ${tool.questions.map(q => `
-                    <td>
-                        <input type="number" name="marksObtained_${studentCount}_${tool.name}_${q.id}" max="${q.maxMarks}" required />
-                    </td>`).join('')}
-                <td><button type="button" class="remove-student-btn" onclick="removeStudent('${studentRowId}')">Remove</button></td>
-            `;
-
-                    tableBody.appendChild(studentRow);
-                });
-
-                // Clear inputs after adding student
-                document.getElementById('studentName').value = '';
-                document.getElementById('rollNumber').value = '';
-
-            } catch (error) {
-                console.error("Error fetching assessment data:", error);
-                alert("Error loading assessment data. Please try again.");
-            }
-        }
-
-        // Function to remove a student row dynamically
-        function removeStudent(rowId) {
-            const row = document.getElementById(rowId);
-            if (row) {
-                row.remove();
-            }
-        }
-
-        document.getElementById('assessmentForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const finalData = {
-                branch: document.getElementById('branchDropdown').value || '',
-                subject: document.getElementById('subjectDropdown').value || '',
-                semester: document.getElementById('semesterDropdown').value || '',
-                courseCode: document.getElementById('courseCode').value || '',
-                batch: document.getElementById('batch').value || '',
-                students: {}
-            };
-
-            const branch = document.getElementById("branchDropdown").value;
-            const semester = document.getElementById("semesterDropdown").value;
-            const subject = document.getElementById("subjectDropdown").value;
-            const courseCode = document.getElementById("courseCode").value;
-            const batch = document.getElementById("batch").value;
-            const faculty = document.getElementById("facultyDropdown").value;
-            const assessmentYear = document.getElementById("assessmentYear").value;
-
-            const queryParams = new URLSearchParams({
-                branch,
-                semester,
-                subject,
-                courseCode,
-                batch,
-                faculty,
-                assessmentYear
-            }).toString();
-
-            console.log('Query:', queryParams);
-
-            try {
-                const response = await fetch(`http://localhost:3000/get-filtered-assessment-data?${queryParams}`);
-
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-
-                const data = await response.json();
-                console.log("Updated Assessment Data:", data);
-
-                const studentRows = document.querySelectorAll('#assessmentToolsSection tr');
-
-                studentRows.forEach(row => {
-                    const rowId = row.id;
-
-                    if (!rowId.includes('-')) {
-                        console.warn(`Skipping row with invalid ID: ${rowId}`);
-                        return;
-                    }
-
-                    const [studentRowPrefix, toolName] = rowId.split('-');
-                    const studentId = studentRowPrefix.split('studentRow')[1];
-
-                    console.log('PRE:', finalData.students);
-
-                    const studentName = row.querySelector('td:nth-child(1) input').value;
-                    const rollNumber = row.querySelector('td:nth-child(2) input').value;
-
-                    console.log('Student:', studentName, rollNumber, studentId);
-
-                    if (!finalData.students[studentId]) {
-                        finalData.students[studentId] = {
-                            name: studentName,
-                            roll: rollNumber,
-                            tools: {}
-                        };
-                    }
-
-                    if (!finalData.students[studentId].tools[toolName]) {
-                        finalData.students[studentId].tools[toolName] = { questions: [] };
-                    }
-
-                    const tool = data.tools.find(t => t.name === toolName);
-                    if (!tool) {
-                        console.warn(`Tool "${toolName}" not found in data.tools`);
-                        return;
-                    }
-
-                    console.log('Tool:', tool);
-
-                    tool.questions.forEach((question, index) => {
-                        const marksInput = row.querySelector(`td:nth-child(${index + 3}) input`);
-                        const marksObtained = marksInput ? marksInput.value : '0';
-
-                        finalData.students[studentId].tools[toolName].questions.push({
-                            questionId: question.id,
-                            co: question.co,
-                            blooms: question.blooms,
-                            maxMarks: question.maxMarks,
-                            marksObtained
-                        });
-                    });
-                });
-
-                console.log('Final Data:', finalData);
-
-                const submitResponse = await fetch('/step2', {
-                    method: 'POST',
-                    body: JSON.stringify(finalData),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-
-                const submitData = await submitResponse.json();
-                alert('Data submitted successfully!');
-                console.log('Submit Response:', submitData);
-
-                generateAssessmentTools();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
-
-
+        // Add Icons support
+        document.head.insertAdjacentHTML('beforeend', `<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">`);
     </script>
-
-
 </body>
 
 </html>

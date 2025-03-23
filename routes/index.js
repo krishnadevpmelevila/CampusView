@@ -11,14 +11,27 @@ const calculateAssessment = require('../utils/calculateAssessment');
 const AssessmentRecord = require('../models/assessmentRecordsSchema');
 
 /* GET home page. */
-router.get('/', authenticateToken, function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/', function (req, res, next) {
+  res.redirect('/dashboard');
+});
+router.get('/assessment-tools', authenticateToken, async function (req, res, next) {
+  // fetch user 
+
+  const user = await User.findOne({ email: req.user.email });
+  console.log(user);
+  res.render('index', { title: 'Express',user:user });
 });
 router.get('/login', function (req, res, next) {
   res.render('login')
 })
 router.get('/register', function (req, res, next) {
   res.render('register')
+})
+
+
+router.get('/weakorbright',async function (req, res, next) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render('weakorbright',{user:user})
 })
 
 router.post('/register', upload.none(), async (req, res) => {
@@ -97,12 +110,12 @@ router.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Internal server error.' });
   }
 });
-router.post('/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   // Clear the cookie named 'token'
   res.clearCookie('token', { path: '/' }); // Ensure the path matches the cookie's path
   res.redirect('/login');
 });
-router.get("/get-filtered-assessment-data", async (req, res) => {
+router.get("/get-filtered-assessment-data",authenticateToken, async (req, res) => {
   try {
     const { branch, semester, subject, courseCode, batch, numCOs, numPOs, numPSOs, faculty, assessmentYear } = req.query;
 
@@ -145,7 +158,7 @@ router.get("/get-filtered-assessment-data", async (req, res) => {
 });
 
 // API to get all unique dropdown values
-router.get("/get-dropdown-data", async (req, res) => {
+router.get("/get-dropdown-data",authenticateToken, async (req, res) => {
   try {
     // Fetch unique values for dropdowns
     const branches = await Assessment.distinct("branch");
@@ -175,7 +188,7 @@ router.get("/get-dropdown-data", async (req, res) => {
   }
 });
 
-router.post('/submit', upload.none(), async (req, res) => {
+router.post('/submit',authenticateToken, upload.none(), async (req, res) => {
 
 
 
@@ -239,29 +252,35 @@ router.post('/submit', upload.none(), async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-router.get('/attaintmentCalculation', function (req, res) {
-  res.render('assessment')
+router.get('/attaintmentCalculation',authenticateToken,async function (req, res) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render('assessment',{user:user})
 })
 
 
-router.get('/calculate-assessment/:assessmentId', async (req, res) => {
+router.get('/calculate-assessment/:assessmentId',authenticateToken, async (req, res) => {
   const { assessmentId } = req.params;
   const result = await calculateAssessment(assessmentId);
   res.json(result);
 });
 
 
-router.get("/home", function (req, res) {
-  res.render("home");
+router.get("/dashboard", authenticateToken,async function (req, res) {
+  // from all assessment records count all students 
+
+  const user = await User.findOne({ email: req.user.email });
+  res.render("home",{user:user});
 })
 
-router.get("/step2", function (req, res) {
-  res.render("step2");
+router.get("/student-data", authenticateToken,async function (req, res) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render("step2",{user:user});
 })
-router.post("/step2", async function (req, res) {
+router.post("/step2", authenticateToken,async function (req, res) {
   try {
     const data = req.body;
-
+    console.log(data);
+    
     if (!data || !data.students) {
       return res.status(400).json({ error: "Invalid data format" });
     }
@@ -308,12 +327,14 @@ router.post("/step2", async function (req, res) {
   }
 });
 
-router.get('/attainment', async (req, res) => {
+router.get('/attainment', authenticateToken,async (req, res) => {
   try {
       const { semester, batch, courseCode } = req.query;
 
       // Step 1: Fetch the relevant assessment
-      const assessment = await Assessment.findOne({ semester, batch, courseCode });
+      // const assessment = await AssessmentRecord.findOne({ semester, batch, courseCode });
+      // fetch only latest
+      const assessment = await AssessmentRecord.findOne({ semester,batch, courseCode }).sort({ createdAt: -1 });
 
       if (!assessment) {
           return res.status(404).json({ message: "Assessment not found" });

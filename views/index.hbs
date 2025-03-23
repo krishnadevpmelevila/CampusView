@@ -4,123 +4,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant Assessment Form</title>
+    <title>Assessment Form</title>
     <link rel="stylesheet" href="/stylesheets/mainstyles.css">
     <script src="/javascripts/main.js" defer></script>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #f8f9fa;
+            --accent-color: #3f37c9;
+            --text-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fb;
+            color: var(--text-color);
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .view-text {
+            color: var(--primary-color);
+            font-weight: 400;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: none;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #eaeaea;
+            padding: 15px 20px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .form-control, .form-select {
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        }
+
+        .sidebar {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            height: 100%;
+            border-radius: var(--border-radius);
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: #f0f4ff;
+            color: var(--primary-color);
+        }
+
+        .sidebar-link i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .tool-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+            padding: 20px;
+            border: none;
+        }
+
+        .section-title {
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        table {
+            background-color: white;
+        }
+
+        table th {
+            background-color: #f8f9fa;
+        }
+
+        .alert-success {
+            background-color: #d1e7dd;
+            border-color: #badbcc;
+            color: #0f5132;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .user-role {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 
-<body class="container mt-4">
-
-    <header class="d-flex justify-content-end align-items-center bg-primary p-3">
-        <div class="md-6">
-            <button id="homeButton" class="btn btn-light fw-bold shadow">
-                Home
-            </button>
-        </div>
-        <div class="md-6">
-            <button id="logoutButton" class="btn btn-light fw-bold shadow">
-                Logout
-            </button>
-        </div>
-
-    </header>
-
-    <div id="successPopup" class="alert alert-success d-none mt-3">
-        Data added successfully!
-    </div>
-
-    <form action="/submit" id="submitForm" method="POST" class="mt-12">
-        <h2 class="text-center">Assessment Form</h2>
-
+<body>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6">
-                <label>Branch: <input type="text" class="form-control" name="branch" required /></label>
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block px-0">
+                <div class="sidebar p-3 h-100">
+                    <div class="d-flex align-items-center mb-4 px-2">
+                        <span class="fs-4 fw-bold">CAMPUS <span class="view-text">VIEW</span></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <a href="/dashboard" class="sidebar-link">
+                            <i class="material-symbols-outlined">dashboard</i>
+                            Dashboard
+                        </a>
+                        <a href="/assessment-tools" class="sidebar-link active">
+                            <i class="material-symbols-outlined">build</i>
+                            Add Assessment Tools
+                        </a>
+                        <a href="/student-data" class="sidebar-link">
+                            <i class="material-symbols-outlined">person</i>
+                            Add Student Data
+                        </a>
+                        <a href="/attaintmentCalculation" class="sidebar-link">
+                            <i class="material-symbols-outlined">calculate</i>
+                            Attainment Calculation
+                        </a>
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <a href="/logout" class="sidebar-link">
+                            <i class="material-symbols-outlined">logout</i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label>Subject: <input type="text" class="form-control" name="subject" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>Semester: <input type="text" class="form-control" name="semester" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>Course Code: <input type="text" class="form-control" name="courseCode" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>Batch: <input type="text" class="form-control" name="batch" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>No. of COs: <input type="number" class="form-control" name="numCOs" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>No. of Students: <input type="number" class="form-control" name="numStudents" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>No. of POs: <input type="number" class="form-control" name="numPOs" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>No. of PSOs: <input type="number" class="form-control" name="numPSOs" required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>University Exam:
-                    <select class="form-control" name="universityExam" required>
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                    </select>
-                </label>
-            </div>
-            <div class="col-md-6">
-                <label>Assessment Year: <input type="text" class="form-control" name="assessmentYear"
-                        required /></label>
-            </div>
-            <div class="col-md-6">
-                <label>Faculty Name: <input type="text" class="form-control" name="facultyName" required /></label>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 ms-sm-auto p-4">
+                <!-- Header -->
+                <div class="navbar d-flex justify-content-between mb-4">
+                    <h1 class="h3">Assessment Form</h1>
+                    <div class="user-profile">
+                        <img src="/images/image.png" alt="User Profile" class="user-avatar">
+                        <div class="user-info">
+                            {{#if user.admin}}
+                            <p class="user-name">Admin</p>
+                            <p class="user-role">Administrator</p>
+                            {{else}}
+                            <p class="user-name">User</p>
+                            <p class="user-role">Staff</p>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alert for Success -->
+                <div id="successPopup" class="alert alert-success d-none mb-4">
+                    Assessment data added successfully!
+                </div>
+
+                <form action="/submit" id="submitForm" method="POST">
+                    <!-- Basic Information Card -->
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Basic Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Branch</label>
+                                    <input type="text" class="form-control" name="branch" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Subject</label>
+                                    <input type="text" class="form-control" name="subject" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Semester</label>
+                                    <input type="text" class="form-control" name="semester" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Course Code</label>
+                                    <input type="text" class="form-control" name="courseCode" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Batch</label>
+                                    <input type="text" class="form-control" name="batch" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">No. of COs</label>
+                                    <input type="number" class="form-control" name="numCOs" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">No. of Students</label>
+                                    <input type="number" class="form-control" name="numStudents" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">No. of POs</label>
+                                    <input type="number" class="form-control" name="numPOs" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">No. of PSOs</label>
+                                    <input type="number" class="form-control" name="numPSOs" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">University Exam</label>
+                                    <select class="form-select" name="universityExam" required>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Assessment Year</label>
+                                    <input type="text" class="form-control" name="assessmentYear" required />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Faculty Name</label>
+                                    <input type="text" class="form-control" name="facultyName" required />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Assessment Tools Card -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Assessment Tools</h5>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="addTool()">
+                                <i class="material-symbols-outlined">add</i> Add Tool
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div id="assessmentTools">
+                                <div class="tool-container mb-4">
+                                    <div class="mb-3">
+                                        <label class="form-label">Select Tool</label>
+                                        <select name="tool[]" class="form-select tool-selector" onchange="updateToolOptions(this)" required>
+                                            <option value="">Select</option>
+                                            <option value="Series 1">Series 1</option>
+                                            <option value="Series 2">Series 2</option>
+                                            <option value="Assignment 1">Assignment 1</option>
+                                            <option value="Assignment 2">Assignment 2</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Q.NO</th>
+                                                    <th>CO No.</th>
+                                                    <th>Blooms Taxonomy</th>
+                                                    <th>Max Marks</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="question-table">
+                                                <tr>
+                                                    <td><input type="number" class="form-control" name="questions[0][]" required /></td>
+                                                    <td><input type="text" class="form-control" name="coNumber[0][]" required /></td>
+                                                    <td><input type="text" class="form-control" name="bloomsTaxonomy[0][]" required /></td>
+                                                    <td><input type="number" class="form-control" name="maxMarks[0][]" required /></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="d-flex">
+                                        <button type="button" class="btn btn-outline-primary me-2" onclick="addQuestion(this)">
+                                            <i class="material-symbols-outlined">add</i> Add Question
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" onclick="removeTool(this)">
+                                            <i class="material-symbols-outlined">delete</i> Remove Tool
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Submit Assessment</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <h2 class="text-center mt-12">Assessment Tools</h2>
-        <div id="assessmentTools">
-            <div class="tool-container border p-3 mb-3">
-                <label>Select Tool:
-                    <select name="tool[]" class="form-select tool-selector" onchange="updateToolOptions(this)" required>
-                        <option value="">Select</option>
-                        <option value="Series 1">Series 1</option>
-                        <option value="Series 2">Series 2</option>
-                        <option value="Assignment 1">Assignment 1</option>
-                        <option value="Assignment 2">Assignment 2</option>
-                    </select>
-                </label>
-
-                <table class="table mt-3">
-                    <thead>
-                        <tr>
-                            <th>Q.NO</th>
-                            <th>CO No.</th>
-                            <th>Blooms Taxonomy</th>
-                            <th>Max Marks</th>
-                        </tr>
-                    </thead>
-                    <tbody class="question-table">
-                        <tr>
-                            <td><input type="number" class="form-control" name="questions[0][]" required /></td>
-                            <td><input type="text" class="form-control" name="coNumber[0][]" required /></td>
-                            <td><input type="text" class="form-control" name="bloomsTaxonomy[0][]" required /></td>
-                            <td><input type="number" class="form-control" name="maxMarks[0][]" required /></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <button type="button" class="btn btn-success me-2" onclick="addQuestion(this)">Add Question</button>
-                <button type="button" class="btn btn-danger" onclick="removeTool(this)">Remove Tool</button>
-            </div>
-        </div>
-
-        <button type="button" class="btn btn-primary mt-3" onclick="addTool()">Add Another Tool</button>
-        <br />
-        <button type="submit" class="btn btn-success mt-3">Submit</button>
-    </form>
+    </div>
 
     <script>
         function addTool() {
@@ -128,9 +368,10 @@
             const toolIndex = document.querySelectorAll('.tool-container').length;
 
             const newTool = document.createElement('div');
-            newTool.className = 'tool-container border p-3 mb-3';
+            newTool.className = 'tool-container mb-4';
             newTool.innerHTML = `
-                <label>Select Tool: 
+                <div class="mb-3">
+                    <label class="form-label">Select Tool</label>
                     <select name="tool[]" class="form-select tool-selector" required>
                         <option value="">Select</option>
                         <option value="Series 1">Series 1</option>
@@ -138,29 +379,37 @@
                         <option value="Assignment 1">Assignment 1</option>
                         <option value="Assignment 2">Assignment 2</option>
                     </select>
-                </label>
+                </div>
 
-                <table class="table mt-3">
-                    <thead>
-                        <tr>
-                            <th>Q.NO</th>
-                            <th>CO No.</th>
-                            <th>Blooms Taxonomy</th>
-                            <th>Max Marks</th>
-                        </tr>
-                    </thead>
-                    <tbody class="question-table">
-                        <tr>
-                            <td><input type="number" class="form-control" name="questions[${toolIndex}][]" required /></td>
-                            <td><input type="text" class="form-control" name="coNumber[${toolIndex}][]" required /></td>
-                            <td><input type="text" class="form-control" name="bloomsTaxonomy[${toolIndex}][]" required /></td>
-                            <td><input type="number" class="form-control" name="maxMarks[${toolIndex}][]" required /></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Q.NO</th>
+                                <th>CO No.</th>
+                                <th>Blooms Taxonomy</th>
+                                <th>Max Marks</th>
+                            </tr>
+                        </thead>
+                        <tbody class="question-table">
+                            <tr>
+                                <td><input type="number" class="form-control" name="questions[${toolIndex}][]" required /></td>
+                                <td><input type="text" class="form-control" name="coNumber[${toolIndex}][]" required /></td>
+                                <td><input type="text" class="form-control" name="bloomsTaxonomy[${toolIndex}][]" required /></td>
+                                <td><input type="number" class="form-control" name="maxMarks[${toolIndex}][]" required /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                <button type="button" class="btn btn-success me-2" onclick="addQuestion(this)">Add Question</button>
-                <button type="button" class="btn btn-danger" onclick="removeTool(this)">Remove Tool</button>
+                <div class="d-flex">
+                    <button type="button" class="btn btn-outline-primary me-2" onclick="addQuestion(this)">
+                        <i class="material-symbols-outlined">add</i> Add Question
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" onclick="removeTool(this)">
+                        <i class="material-symbols-outlined">delete</i> Remove Tool
+                    </button>
+                </div>
             `;
             container.appendChild(newTool);
         }
@@ -176,14 +425,26 @@
             tbody.insertAdjacentHTML('beforeend', row);
         }
 
-        document.getElementById('logoutButton').addEventListener('click', () => {
-            window.location.href = '/login';
-        });
-        document.getElementById('homeButton').addEventListener('click', () => {
-            window.location.href = '/home';
+        function removeTool(button) {
+            const container = button.closest('.tool-container');
+            container.remove();
+        }
+
+        document.getElementById('submitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Normally would submit form data here
+            
+            // Show success message
+            const successPopup = document.getElementById('successPopup');
+            successPopup.classList.remove('d-none');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                successPopup.classList.add('d-none');
+            }, 3000);
         });
     </script>
-
 </body>
 
 </html>
