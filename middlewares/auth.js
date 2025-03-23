@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema'); // Adjust path to your User model
 function authenticateToken(req, res, next) {
     const token = req.cookies.token;
-  
+    
+    
     if (!token) {
       return res.redirect('/login');
     }
@@ -11,6 +12,7 @@ function authenticateToken(req, res, next) {
       if (err) {
         return res.redirect('/login');
       }
+      console.log(user);
       req.user = user;
       next();
     });

@@ -361,7 +361,10 @@
                 </svg>
                 <span class="nav-item-text">Dashboard</span>
             </a>
-
+            <script>
+                console.log("Dropdown Data Received:", data); // Debugging output
+            </script>
+            {{#if user.admin}}
             <a href="/assessment-tools" class="nav-item ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -372,6 +375,8 @@
                 <span class="nav-item-text">Add Assessment Tools</span>
             </a>
 
+
+            {{/if}}
             <a href="/student-data" class="nav-item active">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -413,17 +418,24 @@
                 <h1 class="page-title">Dynamic Student Assessment Entry</h1>
 
                 <div class="d-flex align-items-center">
-                   
+
 
                     <div class="user-section">
                         <img src="/images/image.png" alt="User Profile">
                         <div class="user-info">
-                            <div class="user-name">Admin User</div>
+                            {{#if user.admin}}
+                            <div class="user-name">Admin</div>
                             <div class="user-role">Administrator</div>
+                            {{else}}
+                            <div class="user-name">User</div>
+                            <div class="user-role">Staff</div>
+                            {{/if}}
+
                         </div>
+
                     </div>
 
-                  
+
                 </div>
             </div>
             <div class="container">

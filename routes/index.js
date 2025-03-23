@@ -14,14 +14,24 @@ const AssessmentRecord = require('../models/assessmentRecordsSchema');
 router.get('/', function (req, res, next) {
   res.redirect('/dashboard');
 });
-router.get('/assessment-tools', authenticateToken, function (req, res, next) {
-  res.render('index', { title: 'Express' });
+router.get('/assessment-tools', authenticateToken, async function (req, res, next) {
+  // fetch user 
+
+  const user = await User.findOne({ email: req.user.email });
+  console.log(user);
+  res.render('index', { title: 'Express',user:user });
 });
 router.get('/login', function (req, res, next) {
   res.render('login')
 })
 router.get('/register', function (req, res, next) {
   res.render('register')
+})
+
+
+router.get('/weakorbright',async function (req, res, next) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render('weakorbright',{user:user})
 })
 
 router.post('/register', upload.none(), async (req, res) => {
@@ -242,8 +252,9 @@ router.post('/submit',authenticateToken, upload.none(), async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-router.get('/attaintmentCalculation',authenticateToken, function (req, res) {
-  res.render('assessment')
+router.get('/attaintmentCalculation',authenticateToken,async function (req, res) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render('assessment',{user:user})
 })
 
 
@@ -254,15 +265,16 @@ router.get('/calculate-assessment/:assessmentId',authenticateToken, async (req, 
 });
 
 
-router.get("/dashboard", authenticateToken,function (req, res) {
+router.get("/dashboard", authenticateToken,async function (req, res) {
   // from all assessment records count all students 
 
-  
-  res.render("home");
+  const user = await User.findOne({ email: req.user.email });
+  res.render("home",{user:user});
 })
 
-router.get("/student-data", authenticateToken,function (req, res) {
-  res.render("step2");
+router.get("/student-data", authenticateToken,async function (req, res) {
+  const user = await User.findOne({ email: req.user.email });
+  res.render("step2",{user:user});
 })
 router.post("/step2", authenticateToken,async function (req, res) {
   try {

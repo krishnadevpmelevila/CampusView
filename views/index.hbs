@@ -220,8 +220,13 @@
                     <div class="user-profile">
                         <img src="/images/image.png" alt="User Profile" class="user-avatar">
                         <div class="user-info">
-                            <p class="user-name">Admin User</p>
+                            {{#if user.admin}}
+                            <p class="user-name">Admin</p>
                             <p class="user-role">Administrator</p>
+                            {{else}}
+                            <p class="user-name">User</p>
+                            <p class="user-role">Staff</p>
+                            {{/if}}
                         </div>
                     </div>
                 </div>

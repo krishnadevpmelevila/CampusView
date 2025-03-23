@@ -31,7 +31,7 @@
             --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-            
+
             --radius-sm: 0.5rem;
             --radius-md: 1rem;
             --radius-lg: 1.5rem;
@@ -350,7 +350,8 @@
                 grid-template-columns: 5rem auto 18rem;
             }
 
-            .sidebar-logo h2, .sidebar-menu span {
+            .sidebar-logo h2,
+            .sidebar-menu span {
                 display: none;
             }
 
@@ -359,12 +360,14 @@
                 padding: 1rem 0.5rem;
             }
 
-            .sidebar-menu a, .sidebar-logout a {
+            .sidebar-menu a,
+            .sidebar-logout a {
                 justify-content: center;
                 padding: 1rem;
             }
 
-            .sidebar-menu a i, .sidebar-logout a i {
+            .sidebar-menu a i,
+            .sidebar-logout a i {
                 margin-right: 0;
                 font-size: 1.4rem;
             }
@@ -375,7 +378,8 @@
                 grid-template-columns: 100%;
             }
 
-            .sidebar, .right-sidebar {
+            .sidebar,
+            .right-sidebar {
                 display: none;
             }
 
@@ -451,10 +455,13 @@
                     <i class="fas fa-th-large"></i>
                     <span>Dashboard</span>
                 </a>
+                {{#if user.admin}}
                 <a href="/assessment-tools">
                     <i class="fas fa-tools"></i>
                     <span>Add Assessment Tools</span>
                 </a>
+                
+                {{/if}}
                 <a href="/student-data">
                     <i class="fas fa-user-graduate"></i>
                     <span>Add Student Data</span>
@@ -486,7 +493,7 @@
 
             <div class="header">
                 <h1>Dashboard</h1>
-                
+
             </div>
 
             <div class="cards-container">
@@ -524,7 +531,8 @@
             <div class="recent-activity">
                 <h2>Recent Activity</h2>
                 <!-- This area can be filled with actual content -->
-                <div style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--gray-text);">
+                <div
+                    style="height: 300px; display: flex; align-items: center; justify-content: center; color: var(--gray-text);">
                     <p>No recent activities to display</p>
                 </div>
             </div>
@@ -535,8 +543,13 @@
             <div class="user-profile">
                 <img src="/images/image.png" alt="User Profile">
                 <div class="user-info">
-                    <h3>Admin User</h3>
+                    {{#if user.admin}}
+                    <h3>Admin</h3>
                     <p>Administrator</p>
+                    {{else}}    
+                    <h3>User</h3>
+                    <p>Staff</p>
+                    {{/if}}
                 </div>
             </div>
 

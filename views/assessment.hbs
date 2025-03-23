@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Assessment Input</title>
+    <title>Assessment Result</title>
     <style>
         :root {
             --primary-color: #4154f1;
@@ -196,6 +196,24 @@
             color: #721c24;
         }
 
+        .student-category-bright {
+            background-color: #d1e7dd;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .student-category-average {
+            background-color: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+        }
+
+        .student-category-weak {
+            background-color: #f8d7da;
+            color: #721c24;
+            font-weight: bold;
+        }
+
         .loading {
             text-align: center;
             margin: 20px 0;
@@ -252,10 +270,14 @@
             <i class="bi bi-grid"></i> Dashboard
         </a>
 
+        {{#if user.admin}}
         <a href="/assessment-tools" class="sidebar-link">
             <i class="bi bi-tools"></i> Add Assessment Tools
         </a>
+       
+        {{/if}}
 
+        {{!-- /if --}}
         <a href="/student-data" class="sidebar-link">
             <i class="bi bi-mortarboard"></i> Add Student Data
         </a>
@@ -271,17 +293,22 @@
 
     <!-- Header -->
     <header class="header">
-        <h1 class="header-title">Dynamic Student Assessment Entry</h1>
+        <h1 class="header-title">Assessment Result</h1>
 
         <div class="d-flex align-items-center">
-           
+
 
             <div class="user-info ms-4 user-profile">
                 <img src="/images/image.png" width="40px" alt="User Profile" class="rounded-circle">
                 <div class="ms-2">
-                    <div class="user-profile">Admin User</div>
+                    {{#if user.admin}}
+                    <div class="user-profile">Admin</div>
                     <div class="user-role">Administrator</div>
                 </div>
+                {{else}}
+                <div class="user-profile">User</div>
+                <div class="user-role">Staff</div>
+                {{/if}}
             </div>
 
             <button class="theme-toggle ms-3">
@@ -532,6 +559,9 @@
                         addHeaderCell(headerRow, `${co} Percentage %`);
                     });
 
+                    // Add Student Category header
+                    addHeaderCell(headerRow, "Student Category");
+
                     thead.appendChild(headerRow);
                     mainTable.appendChild(thead);
 
@@ -545,6 +575,10 @@
                         // Add student name and roll
                         addCell(row, student.name);
                         addCell(row, student.roll);
+
+                        // Calculate average percentage across all COs for this student
+                        let totalPercentage = 0;
+                        let validCOCount = 0;
 
                         // Add CO-specific data
                         courseOutcomes.forEach(co => {
@@ -570,10 +604,36 @@
                                 } else {
                                     percentageCell.classList.add("attainment-level-low");
                                 }
+
+                                // Add to total for category calculation
+                                totalPercentage += percentValue;
+                                validCOCount++;
                             }
 
                             row.appendChild(percentageCell);
                         });
+
+                        // Calculate student category based on average percentage
+                        const avgPercentage = validCOCount > 0 ? totalPercentage / validCOCount : 0;
+                        let studentCategory = "";
+                        let categoryClass = "";
+
+                        if (avgPercentage >= 75) {
+                            studentCategory = "Bright";
+                            categoryClass = "student-category-bright";
+                        } else if (avgPercentage >= 60) {
+                            studentCategory = "Average";
+                            categoryClass = "student-category-average";
+                        } else {
+                            studentCategory = "Weak";
+                            categoryClass = "student-category-weak";
+                        }
+
+                        // Add student category cell
+                        const categoryCell = document.createElement("td");
+                        categoryCell.textContent = studentCategory;
+                        categoryCell.className = categoryClass;
+                        row.appendChild(categoryCell);
 
                         tbody.appendChild(row);
                     });
@@ -683,6 +743,98 @@
                     summaryTable.appendChild(summaryTbody);
                     summaryDiv.appendChild(summaryTable);
                     attainmentTableContainer.appendChild(summaryDiv);
+
+                    // Create student category summary
+                    const categorySummaryDiv = document.createElement("div");
+                    categorySummaryDiv.className = "mt-4";
+
+                    const categorySummaryHeading = document.createElement("h4");
+                    categorySummaryHeading.textContent = "Student Category Summary";
+                    categorySummaryHeading.className = "mb-3 text-primary";
+                    categorySummaryDiv.appendChild(categorySummaryHeading);
+
+                    const categorySummaryTable = document.createElement("table");
+                    categorySummaryTable.className = "table table-bordered";
+
+                    // Create category summary table header
+                    const categorySummaryThead = document.createElement("thead");
+                    const categorySummaryHeaderRow = document.createElement("tr");
+
+                    addHeaderCell(categorySummaryHeaderRow, "Category");
+                    addHeaderCell(categorySummaryHeaderRow, "Number of Students");
+                    addHeaderCell(categorySummaryHeaderRow, "Percentage");
+
+                    categorySummaryThead.appendChild(categorySummaryHeaderRow);
+                    categorySummaryTable.appendChild(categorySummaryThead);
+
+                    // Create category summary table body
+                    const categorySummaryTbody = document.createElement("tbody");
+
+                    // Calculate category counts
+                    let brightCount = 0;
+                    let averageCount = 0;
+                    let weakCount = 0;
+                    const totalStudents = data.students.length;
+
+                    data.students.forEach(student => {
+                        let totalPercentage = 0;
+                        let validCOCount = 0;
+
+                        courseOutcomes.forEach(co => {
+                            if (student.percentageByCO[co]) {
+                                totalPercentage += parseFloat(student.percentageByCO[co]);
+                                validCOCount++;
+                            }
+                        });
+
+                        const avgPercentage = validCOCount > 0 ? totalPercentage / validCOCount : 0;
+
+                        if (avgPercentage >= 75) {
+                            brightCount++;
+                        } else if (avgPercentage >= 60) {
+                            averageCount++;
+                        } else {
+                            weakCount++;
+                        }
+                    });
+
+                    // Add category rows
+                    // Bright students
+                    const brightRow = document.createElement("tr");
+                    const brightCell = document.createElement("td");
+                    brightCell.textContent = "Bright";
+                    brightCell.classList.add("student-category-bright");
+                    brightRow.appendChild(brightCell);
+
+                    addCell(brightRow, brightCount);
+                    addCell(brightRow, ((brightCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(brightRow);
+
+                    // Average students
+                    const averageRow = document.createElement("tr");
+                    const averageCell = document.createElement("td");
+                    averageCell.textContent = "Average";
+                    averageCell.classList.add("student-category-average");
+                    averageRow.appendChild(averageCell);
+
+                    addCell(averageRow, averageCount);
+                    addCell(averageRow, ((averageCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(averageRow);
+
+                    // Weak students
+                    const weakRow = document.createElement("tr");
+                    const weakCell = document.createElement("td");
+                    weakCell.textContent = "Weak";
+                    weakCell.classList.add("student-category-weak");
+                    weakRow.appendChild(weakCell);
+
+                    addCell(weakRow, weakCount);
+                    addCell(weakRow, ((weakCount / totalStudents) * 100).toFixed(2) + "%");
+                    categorySummaryTbody.appendChild(weakRow);
+
+                    categorySummaryTable.appendChild(categorySummaryTbody);
+                    categorySummaryDiv.appendChild(categorySummaryTable);
+                    attainmentTableContainer.appendChild(categorySummaryDiv);
 
                     // Show the results container
                     attainmentResults.style.display = "block";
