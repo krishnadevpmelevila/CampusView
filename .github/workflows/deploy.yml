@@ -24,3 +24,4 @@ jobs:
           git pull origin main
           npm install
           pm2 restart campusview || pm2 start npm --name "campusview" -- start
+          
