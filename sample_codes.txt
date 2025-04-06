@@ -1,0 +1,260 @@
+-----------------------------
+Attaintement Calculation:
+-----------------------------
+const Assessment = require('../models/assessmentSchema');
+
+async function calculateAssessment(assessmentId) {
+    try {
+        const assessment = await Assessment.findById(assessmentId);
+        if (!assessment) {
+            return { message: "Assessment not found!" };
+        }
+
+        let coScores = {};
+        let coTotalMarks = {};
+
+        // Iterate through tools and questions
+        assessment.tools.forEach(tool => {
+            tool.questions.forEach(question => {
+                const coNumber = question.coNumber;
+                const maxMarks = parseFloat(question.maxMarks) || 0;
+
+                if (!coScores[coNumber]) {
+                    coScores[coNumber] = 0;
+                    coTotalMarks[coNumber] = 0;
+                }
+
+                coScores[coNumber] += maxMarks;
+                coTotalMarks[coNumber] += 10; // Assuming CO attainment is scaled to 10
+            });
+        });
+
+        // Compute CO Attainment Percentage
+        let coAttainment = {};
+        Object.keys(coScores).forEach(co => {
+            coAttainment[co] = ((coScores[co] / coTotalMarks[co]) * 100).toFixed(2) + "%";
+        });
+
+        return {
+            assessmentId,
+            coAttainment
+        };
+
+    } catch (error) {
+        console.error("Error in assessment calculation:", error);
+        return { message: "Internal Server Error", error: error.message };
+    }
+}
+
+module.exports = calculateAssessment;
+
+
+---------------------------------------
+Attaintement Tool Generation
+---------------------------------------
+router.post('/submit',authenticateToken, upload.none(), async (req, res) => {
+
+
+
+  try {
+    if (!req.body.tool || !Array.isArray(req.body.tool) || req.body.tool.length === 0) {
+      return res.status(400).json({ message: "Invalid assessment tools data." });
+    }
+
+    // Utility function to ensure arrays are properly formatted
+    const parseArray = (data) => {
+      if (!data) return [];
+      if (Array.isArray(data)) return data;
+      return Object.values(data); // Convert object to array (Fixes multer issue)
+    };
+
+    const finalData = {
+      branch: req.body.branch || "",
+      subject: req.body.subject || "",
+      semester: req.body.semester || "",
+      courseCode: req.body.courseCode || "",
+      batch: req.body.batch || "",
+      numCOs: req.body.numCOs || 0,
+      numStudents: req.body.numStudents || 0,
+      numPOs: req.body.numPOs || 0,
+      numPSOs: req.body.numPSOs || 0,
+      universityExam: req.body.universityExam || "No",
+      assessmentYear: req.body.assessmentYear || "Unknown",
+      facultyName: req.body.facultyName || "Unknown",
+      tools: req.body.tool.map((tool, index) => {
+        const questions = parseArray(req.body.questions?.[index]);
+        const coNumbers = parseArray(req.body.coNumber?.[index]);
+        const bloomsTaxonomy = parseArray(req.body.bloomsTaxonomy?.[index]);
+        const maxMarks = parseArray(req.body.maxMarks?.[index]);
+
+        return {
+          toolName: tool,
+          questions: questions.map((q, i) => ({
+            questionNumber: q || "N/A",
+            coNumber: coNumbers[i] || "N/A",
+            bloomsTaxonomy: bloomsTaxonomy[i] || "N/A",
+            maxMarks: maxMarks[i] || "0",
+          })),
+        };
+      }),
+    };
+
+    // Save to MongoDB
+    try {
+      const newAssessment = new Assessment(finalData);
+      await newAssessment.save();
+
+      console.log("Final Data Saved:", JSON.stringify(finalData, null, 2));
+      res.status(201).json({ message: "Data successfully saved!" });
+    } catch (error) {
+      console.error("Error saving data:", error);
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
+    }
+
+  } catch (error) {
+    console.error("Error saving data:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
+------------------------------ 
+Add student data
+------------------------------
+
+router.post("/step2", authenticateToken,async function (req, res) {
+  try {
+    const data = req.body;
+    console.log(data);
+    
+    if (!data || !data.students) {
+      return res.status(400).json({ error: "Invalid data format" });
+    }
+
+    // Convert students object into an array
+    const students = Object.values(data.students).map((student) => ({
+      name: student.name,
+      roll: student.roll,
+      tools: Object.entries(student.tools).map(([toolName, toolData]) => ({
+        toolName: toolName,
+        questions: toolData.questions.map((q) => ({
+          questionNumber: q.questionId,
+          coNumber: q.co,
+          bloomsTaxonomy: q.blooms,
+          maxMarks: q.maxMarks,
+          marksObtained: q.marksObtained, // Store marks obtained
+        })),
+      })),
+    }));
+
+    // Create and save in AssessmentRecords collection
+    const assessmentRecord = new AssessmentRecord({
+      branch: data.branch,
+      subject: data.subject,
+      semester: data.semester,
+      courseCode: data.courseCode.trim(),
+      batch: data.batch,
+      numCOs: data.numCOs || "N/A",
+      numStudents: data.numStudents || students.length.toString(), // Auto count students
+      numPOs: data.numPOs || "N/A",
+      numPSOs: data.numPSOs || "N/A",
+      universityExam: data.universityExam || "N/A",
+      assessmentYear: data.assessmentYear || "N/A",
+      facultyName: data.facultyName || "N/A",
+      students: students, // Store student data
+    });
+
+    await assessmentRecord.save(); // Save to MongoDB
+
+    res.status(201).json({ message: "Assessment record saved successfully!" });
+  } catch (error) {
+    console.error("Error saving data:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+-----------------------
+Registration
+-----------------------
+
+router.post('/register', upload.none(), async (req, res) => {
+  console.log(req.body);
+
+  try {
+    const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Username and password are required.' });
+    }
+
+    // Check if the username already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Username already exists.' });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const newUser = new User({ email, password: hashedPassword });
+    await newUser.save();
+
+    // Generate a JWT token for the new user
+    const token = jwt.sign(
+      { username: newUser.email }, // Payload
+      process.env.JWT_SECRET, // Secret key
+      { expiresIn: '1h' } // Token expiration time
+    );
+
+    res.status(201).json({ token, message: 'User registered successfully!' });
+  } catch (error) {
+    console.error('Error registering user:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
+
+-----------------------
+Login
+-----------------------
+
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find the user in the database
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    // Compare the provided password with the hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    // Generate a JWT token
+    const token = jwt.sign(
+      { email: user.email }, // Payload
+      process.env.JWT_SECRET, // Secret key
+      { expiresIn: '1h' } // Token expiration time
+    );
+
+    // Set the token in an HTTP-only cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    // Add the token to the response headers
+    res.setHeader('Authorization', `Bearer ${token}`);
+
+    res.redirect('/')
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});

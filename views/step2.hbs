@@ -765,7 +765,7 @@
 
                 try {
                     // Fetch updated assessment data
-                    const response = await fetch(`http://localhost:5555/get-filtered-assessment-data?${queryParams}`);
+                    const response = await fetch(`http://82.112.226.47:5555/get-filtered-assessment-data?${queryParams}`);
                     if (!response.ok) {
                         throw new Error("Failed to fetch data");
                     }
